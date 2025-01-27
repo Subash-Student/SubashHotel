@@ -4,6 +4,7 @@ import cors from "cors"
 import userModal from "./model/userModel.js";
 import bcrypt from "bcrypt"
 import userRouter from "./routes/userRoute.js";
+import applicationRoute from "./routes/applicationRoute.js";
 
 const app = express();
 const PORT = 5000;
@@ -23,32 +24,13 @@ app.use(cors({
     credentials: true,
   }));
 
-// Dynamic CORS Configuration
-// const allowedOrigins = [
-//  
-// ];
-
-// const corsOptions = {
-//   origin: (origin, callback) => {
-//     if (allowedOrigins.includes(origin) || !origin) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   },
-//   methods: 'GET,POST,PUT,DELETE,PATCH',
-//   allowedHeaders: ['Content-Type', 'Authorization', 'token'],
-//   credentials: true,
-// };
-// app.use(cors(corsOptions));
-// app.options('*', cors(corsOptions)); // Handle preflight
 
 
 
 // ROUTES
 
 app.use("/api",userRouter);
-
+app.use("/api",applicationRoute)
 
 // CREATE THE SERVER
 

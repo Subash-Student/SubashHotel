@@ -10,13 +10,13 @@ const NumberBar = () => {
         let income = 0;
         let expense = 0;
 
-        records.forEach((record) => {
+        !!records?records.forEach((record) => {
             if (record.catagory === "income") {
                 income += record.amount;
             } else {
                 expense += record.amount;
             }
-        });
+        }): <></>
 
         return { income, expense };
     }, [records]); // Recalculates only when `records` change.

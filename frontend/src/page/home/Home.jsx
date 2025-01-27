@@ -4,12 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import "./home.css";
 import { StoreContext } from "../../context/context";
-// import Navbar from "../../components/navbar/Navbar";
-// import Record from "../../components/record/Record";
-// import Footer from "../../components/footer/Footer";
-// import NumberBar from "../../components/numberBar/NumberBar";
-// import Analysis from "../../components/analysis/Analysis";
-// import Search from "../../components/Search/Search";
+import Navbar from "../../components/navbar/Navbar";
+import Footer from "../../components/footer/Footer";
+import NumberBar from "../../components/numberBar/NumberBar";
+import Record from "../../components/record/Record";
+import Analysis from "../../components/analysis/Analysis";
+import Search from "../../components/Search/Search";
 
 axios.defaults.withCredentials = true;
 
