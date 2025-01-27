@@ -18,8 +18,10 @@ connectDB()
 // MIDDLEWARE
 
 app.use(express.json())
-app.use(cors())
-
+app.use(cors({
+    origin: "http://localhost:3000", // React app origin
+    credentials: true,
+  }));
 
 // Dynamic CORS Configuration
 // const allowedOrigins = [

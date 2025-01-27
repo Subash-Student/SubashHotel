@@ -1,0 +1,124 @@
+
+.body4 {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    margin-top: 95px;
+  }
+  
+
+  .container2 {
+    padding: 10px;
+  }
+  
+
+  .dropdown-box {
+    margin-bottom: 10px;
+  }
+  
+  .dropdown-box label {
+    font-size:large;
+    color: #000000;
+  }
+  
+  .dropdown {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #fff;
+  }
+  
+
+  .dropdown option.income-option {
+    color: rgb(7, 238, 7);
+  }
+  
+  .dropdown option.expense-option {
+    color: red;
+  }
+  
+  .dropdown option.total-option {
+    color: rgb(26, 223, 245);
+  }
+  
+
+  .date-and-submit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap; 
+  }
+  
+
+  .date-label {
+    display: block;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
+    margin-left: 40px;
+  }
+  
+
+  .date-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #fff;
+  }
+  
+
+  .submit-btn2 {
+    flex: 1;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 23px;
+  }
+  
+  .submit-btn2:hover {
+    background-color: #45a049;
+  }
+  
+  
+  .date-field-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  .chart-container {
+    position: relative;
+    height: 300px;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .date-input,
+    .submit-btn2 {
+      font-size: 0.9rem;
+      padding: 8px;
+    }
+  
+    
+    .date-and-submit {
+      flex-wrap: nowrap;
+    }
+  
+    .date-input, .submit-btn {
+      flex: 1;
+    }
+    .chart-container{
+      height: 250px;
+    }
+  }

@@ -1,0 +1,124 @@
+#body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    padding: 5px;
+    width: 100%;
+    margin: auto;
+}
+
+.header3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0a0f12;
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.divider {
+    border: 0;
+    border-top: 2px solid #ddd;
+    margin-bottom: 10px;
+}
+.record-list {
+    max-height: 400px; /* Set the desired maximum height for the record list */
+    overflow-y: auto;  /* Enables vertical scrolling when content exceeds max-height */
+  }
+  
+.detail-item {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+}
+
+.detail-content {
+    flex: 1;
+    margin-left: 20px;
+
+}
+
+.detail-content p {
+    margin: 0;
+    font-size: 15px;
+}
+
+.detail-content .details {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.detail-content .contact {
+    /* font-style: italic; */
+    color: #555;
+}
+
+.detail-content .date-time {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 8px;
+}
+
+.detail-content .extra-info {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.detail-content .file-info {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.file-info img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: #27ae60;
+    text-align: right;
+}
+
+.image-container {
+    flex-shrink: 0;
+}
+
+.image-container img {
+    width: 18px;
+    height: 18px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+.add-button {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #1c6e11;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+}
+.add-button:hover {
+    background-color: #219150;
+}
+.expense{
+    color: red;
+}

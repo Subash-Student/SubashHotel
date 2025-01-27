@@ -1,0 +1,71 @@
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin:auto;
+  padding: 20px;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+
+}
+
+
+.header {
+    margin-bottom: 15px;
+    display: flex;
+    border-bottom: 1px solid gray;
+    padding-bottom: 8px;
+  }
+  
+  .header h1 {
+    
+  margin-left:130px ;
+  font-size: 24px;
+  color: #333;
+}
+.header img{
+  width: 20px;
+  height: 20px;
+}
+.catagory{
+  display: flex;
+  justify-content: space-evenly;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    
+}
+.income{
+  font-size: large;
+  color: rgb(5, 236, 5);
+  cursor: pointer;
+}
+.expense{
+  cursor: pointer;
+  font-size: large;
+  color: rgb(214, 11, 11);
+  
+}
+.income-current{
+  font-size: larger;
+  color: rgb(5, 236, 5);
+  border-bottom:3px solid rgb(0, 239, 24);
+  cursor: pointer;
+  padding-bottom: 6px;
+  transition: 1ms;
+  font-weight: 600;
+}
+.expense-current{
+  transition:1ms;
+  cursor: pointer;
+  font-size: larger;
+  font-weight: 600;
+  color: rgb(236, 3, 3);
+  border-bottom:3px solid rgb(217, 6, 6);
+  padding-bottom: 6px;
+  
+}
+.expense:hover{
+  color: rgb(111, 1, 1);
+}
+.income:hover{
+  color: rgb(0, 100, 0);
+}

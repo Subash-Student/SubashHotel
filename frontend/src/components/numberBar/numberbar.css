@@ -1,0 +1,64 @@
+
+.body3 {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    margin-top: 95px;
+
+}
+
+
+.bar-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2px;
+    height: 10px;
+}
+
+
+.bar-section {
+    text-align: center;
+    flex: 1;
+}
+
+.bar-section:not(:last-child) {
+    border-right: 1px solid #ddd;
+}
+
+
+.bar-section .value {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.income .value {
+    color: #27ae60; 
+}
+
+.expense .value {
+    color: #e74c3c; 
+}
+
+.total .value {
+    color: #2980b9;
+}
+
+
+@media (max-width: 768px) {
+    .bar-container {
+        flex-wrap: nowrap; 
+    }
+
+    .bar-section:not(:last-child) {
+        border-right: 1px solid #ddd;
+    }
+
+    .bar-section {
+        padding: 10px 0;
+        flex: 1;
+    }
+}
