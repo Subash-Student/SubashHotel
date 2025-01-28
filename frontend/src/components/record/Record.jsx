@@ -5,7 +5,8 @@ import axios from "axios"
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { StoreContext } from '../../context/context';
-import AddDetails from '../addDetails/AddDetails';
+import AddDetails from '../addDetails/AddDetails.jsx';
+
 
 
 
@@ -104,7 +105,9 @@ const Record = () => {
   </div>
 
   <button className="add-button" onClick={() =>setIsOpen(true) }>+</button>
-  
+  {isOpen &&
+   <AddDetails />
+  }
 </div>
     
     );

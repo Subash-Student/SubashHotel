@@ -75,9 +75,7 @@ const Home = () => {
           <Record />
         </>
       )}
-      {isOpen &&
-   <AddDetails />
-  }
+    
       <Footer />
     </div>
   );

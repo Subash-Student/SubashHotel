@@ -1,13 +1,124 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./add.css"
+import axios from "axios"
+import { toast } from "react-toastify";
+import { useReactMediaRecorder } from "react-media-recorder";
+import { StoreContext } from '../../context/context';
+import { FaMicrophone, FaTrashAlt } from "react-icons/fa";
+
+
 const AddDetails = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const { isOpen, token,setIsOpen } = useContext(StoreContext);
+
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [currentType,setCurrentType] = useState("expense");
+  const [image,setImage] = useState(null);
+  const [data,setData] = useState({
+    reason:"",
+    amount:"",
+    type:"Cash",
+    person:"",
+    mobile:"",
+    isDefault:false,
+    isFromIncome:false,
+  })
 
-  const handleClose = () => {
-    setIsOpen(false);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
   };
+
+  const handleCheckboxChange = (event) => {
+    if(event.target.checked) {
+      setData({ ...data, [event.target.name]: true });
+    }else{
+      setData({ ...data, [event.target.name]: false });
+     
+    }
+  };
+
+  const handleFileChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+console.log(data)
+
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [audioURL, setAudioURL] = useState(null);
+
+  const handleStop = (blobUrl, blob) => {
+    console.log("Blob URL:", blobUrl);
+    console.log("Blob Object:", blob);
+    setAudioURL(blobUrl); // Set the URL for playback
+    setAudioBlob(blob);   // Save the Blob if needed for uploading
+  };
+
+  const { status, startRecording, stopRecording } = useReactMediaRecorder({
+    mediaRecorderOptions: { mimeType: "audio/webm" },
+    onStop: handleStop, // Callback when recording stops
+  });
+
+
+  const handleDelete = () => {
+    setAudioBlob(null);
+    setAudioURL(null);
+  };
+
+
+  const onSubmit = async(e)=>{
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    for(let key in data){
+      formData.append(`${key}`,data[key]);
+    }
+    
+    formData.append("audio",audioBlob);
+    formData.append("image",image);
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/add-record-details",formData,{
+        headers: {
+          token: token,
+        },
+        withCredentials: true,
+      });
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setData({
+          reason: "",
+          amount: 0,
+          type: "cash",
+          person: "",
+          mobile: "",
+          isDefault:false,
+          isFromIncome:false
+        });
+        setImage(null);
+        setAudioBlob(null);
+        setAudioURL("");
+         document.getElementById("image").value = "";
+      } else {
+        toast.error(response.data.message);
+      }
+
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response ? error.response.data.message : error.message);
+    }
+
+  }
+
+
+
+
+
+
+
+
+
 
   const handleToggleDetails = () => {
     setShowMoreDetails(!showMoreDetails);
@@ -21,7 +132,7 @@ const AddDetails = () => {
           <div className="popup-navbar">
             <button className={`popup-nav-button ${currentType === "income" ? "income":""}`} onClick={()=>setCurrentType("income")}>Income</button>
             <button className={`popup-nav-button ${currentType === "expense" ? "expense":""}`} onClick={()=>setCurrentType("expense")}>Expense</button>
-            <button onClick={handleClose} className="popup-close-button">
+            <button onClick={()=>setIsOpen(false)} className="popup-close-button">
               X
             </button>
           </div>
@@ -31,7 +142,7 @@ const AddDetails = () => {
             {/* Default Reasons Select */}
             <div className="form-group">
               <label className="form-label">Default Reasons</label>
-              <select className="form-input">
+              <select className="form-input" value={data.reason} name="reason"onChange={handleInputChange}>
                 <option value="">Select a reason</option>
                 <option value="food">Food</option>
                 <option value="travel">Travel</option>
@@ -43,9 +154,12 @@ const AddDetails = () => {
             <div className="form-group">
               <label className="form-label">Reason</label>
               <input
+              value={data.reason}
                 type="text"
                 placeholder="Enter your reason"
                 className="form-input"
+                name="reason"
+                onChange={handleInputChange}
               />
             </div>
 
@@ -53,9 +167,12 @@ const AddDetails = () => {
             <div className="form-group">
               <label className="form-label">Amount</label>
               <input
+              value={data.amount}
                 type="number"
                 placeholder="Enter amount"
                 className="form-input"
+                name="amount"
+                onChange={handleInputChange}
               />
             </div>
 
@@ -64,10 +181,10 @@ const AddDetails = () => {
               <label className="form-label">Payment Method</label>
               <div className="payment-options">
                 <label>
-                  <input type="radio" name="payment" value="cash" /> Cash
+                  <input type="radio" name="type" value="cash" onChange={handleInputChange}  defaultChecked={data.type==="cash"} /> Cash
                 </label>
                 <label>
-                  <input type="radio" name="payment" value="gpay" /> GPay
+                  <input type="radio" name="type" value="gpay" onChange={handleInputChange} defaultChecked={data.type==="gpay"} /> GPay
                 </label>
               </div>
               <label className="form-label">Others</label>
@@ -76,13 +193,16 @@ const AddDetails = () => {
                 
                 <div className="form-checkbox-group">
                   <div className="form-checkbox">
-                    <input type="checkbox" id="make-default" />
+                    <input type="checkbox" defaultChecked={data.isDefault} name="isDefault" onClick={handleCheckboxChange} id="make-default" />
                     <label htmlFor="make-default" className="font">Make it default</label>
                   </div>
+                  {currentType === "expense" && <>
                   <div className="form-checkbox">
-                    <input type="checkbox" id="from-income" />
-                    <label htmlFor="from-income" className="font">From income</label>
-                  </div>
+                  <input type="checkbox" defaultChecked={data.isFromIncome} name="isFromIncome" onClick={handleCheckboxChange} id="make-default" />
+                  <label htmlFor="make-default" className="font">Its From Income</label>
+                </div>
+                  </>
+                  }
                 </div>
 
               </div>
@@ -106,6 +226,8 @@ const AddDetails = () => {
                     type="text"
                     placeholder="Enter name"
                     className="form-input"
+                    name="person"
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group">
@@ -114,23 +236,59 @@ const AddDetails = () => {
                     type="tel"
                     placeholder="Enter mobile"
                     className="form-input"
+                    name="mobile"
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Upload Image</label>
-                  <input type="file" className="form-input" />
+                  <input type="file" id="image" onChange={handleFileChange} className="form-input" />
                 </div>
+
+
                 <div className="form-group">
-                  <label className="form-label">Voice Record</label>
-                  <button className="record-button">Hold to Record</button>
-                </div>
+      <label className="form-label">Voice Record</label>
+
+      <div className="recording-controls">
+        {status !== "recording" &&
+        (<button
+          className={`record-button ${status === "recording" ? "recording" : ""}`}
+          onClick={startRecording}
+          disabled={status === "recording"}
+        >
+          <FaMicrophone className="mic-icon" />
+          {status === "recording" ? "Recording..." : "Click to Record"}
+        </button>)
+        }
+
+        {status === "recording" && (
+          <button className="record-button recording" onClick={stopRecording}>
+          <FaMicrophone className="mic-icon" />
+
+            Stop
+          </button>
+        )}
+      </div>
+
+      {audioBlob && (
+        <div className="audio-player-container">
+          <audio controls>
+            <source src={audioURL} type="audio/wav" />
+            Your browser does not support the audio element.
+          </audio>
+          <button className="trash-button" onClick={handleDelete}>
+            <FaTrashAlt />
+          </button>
+        </div>
+      )}
+    </div>
               </div>
             )}
           </div>
 
           {/* Footer */}
           <div className="popup-footer">
-            <button className="submit-button">Submit</button>
+            <button className="submit-button" onClick={onSubmit}>Submit</button>
           </div>
         </div>
       </div>
