@@ -10,6 +10,7 @@ const StoreContextProvider = (props) => {
   const [userData,setUserData] = useState({});
     const [currentPage,setCurrentPage] = useState("record");
 const [records,setRecords] = useState([]);
+const [isOpen, setIsOpen] = useState(false);
 
     
 
@@ -24,7 +25,9 @@ const [records,setRecords] = useState([]);
     currentPage,
     setCurrentPage,
     records,
-    setRecords
+    setRecords,
+    isOpen,
+    setIsOpen
   };
 
   return (

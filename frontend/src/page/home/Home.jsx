@@ -10,6 +10,7 @@ import NumberBar from "../../components/numberBar/NumberBar";
 import Record from "../../components/record/Record";
 import Analysis from "../../components/analysis/Analysis";
 import Search from "../../components/Search/Search";
+import AddDetails from "../../components/addDetails/AddDetails";
 
 axios.defaults.withCredentials = true;
 
@@ -35,7 +36,7 @@ const fetchUserData = async ({ queryKey }) => {
 };
 
 const Home = () => {
-  const { token, setUserData, currentPage } = useContext(StoreContext);
+  const { token,isOpen, setUserData, currentPage } = useContext(StoreContext);
 
   // Use `useQuery` with object-based arguments (React Query v5 format)
   const { data: userData, isLoading, isError, error } = useQuery({
@@ -74,6 +75,9 @@ const Home = () => {
           <Record />
         </>
       )}
+      {isOpen &&
+   <AddDetails />
+  }
       <Footer />
     </div>
   );

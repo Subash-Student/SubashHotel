@@ -5,6 +5,7 @@ import axios from "axios"
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { StoreContext } from '../../context/context';
+import AddDetails from '../addDetails/AddDetails';
 
 
 
@@ -23,7 +24,7 @@ const fetchRecordsData = async (token) => {
 
     return response.data.records; // Return the records array
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to fetch user data!");
+    throw new Error(error.response?.data?.message || "Failed to fetch records data!");
   }
 };
 
@@ -33,7 +34,7 @@ const Record = () => {
   
     const [activeRecord, setActiveRecord] = useState(null);
     const navigate = useNavigate();
-    const {  token, setRecords } = useContext(StoreContext);
+    const { isOpen, token, setRecords,setIsOpen } = useContext(StoreContext);
 
     const { data: records, isLoading, isError, error } = useQuery({
       queryKey: ["records", token], // Unique query key
@@ -102,9 +103,10 @@ const Record = () => {
     )}
   </div>
 
-  <button className="add-button" onClick={() => navigate("/addDetails")}>+</button>
+  <button className="add-button" onClick={() =>setIsOpen(true) }>+</button>
+  
 </div>
-
+    
     );
 };
 

@@ -6,6 +6,7 @@ import LogIn from "./page/login/Login.jsx"; // Check if Login.jsx is correctly e
 import Home from "./page/home/Home.jsx";   // Check if Home.jsx is correctly exported
 import { StoreContext } from './context/context.js'; // Check if StoreContext is correctly exported
 
+
 function App() {
   const { token } = useContext(StoreContext);
   const navigate = useNavigate();
