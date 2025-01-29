@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -44,14 +44,18 @@ const Home = () => {
     queryFn: fetchUserData, // Query function
     enabled: !!token, // Only run the query if token exists
     onSuccess: (data) => {
-      setUserData(data); // Update user data in context
+      setUserData(data)
+       // Update user data in context
       toast.success("User Data Fetched Successfully!");
     },
     onError: (err) => {
       toast.error(err); // Show error message
     },
   });
+  useEffect(()=>{
+    if(userData){setUserData(userData)}
 
+  },[userData])
   // Loading state
   if (isLoading) {
     return <h1>Loading...</h1>;

@@ -13,7 +13,8 @@ const reasonRecordSchema = new mongoose.Schema({
     image: { type: String },
     audio: { type: String }, 
     createdAt: { type: Date, required: true, default: Date.now },
-    isDefault:{ type: Boolean, required:true },
+    isFromIncome:{ type: Boolean, required:true },
+   
     
 });
 

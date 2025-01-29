@@ -8,7 +8,7 @@ import { FaMicrophone, FaTrashAlt } from "react-icons/fa";
 
 
 const AddDetails = () => {
-  const { isOpen, token,setIsOpen } = useContext(StoreContext);
+  const { isOpen,userData, token,setIsOpen } = useContext(StoreContext);
 
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [currentType,setCurrentType] = useState("expense");
@@ -41,7 +41,7 @@ const AddDetails = () => {
     setImage(e.target.files[0]);
   };
 
-console.log(data)
+
 
   const [audioBlob, setAudioBlob] = useState(null);
   const [audioURL, setAudioURL] = useState(null);
@@ -112,7 +112,33 @@ console.log(data)
   }
 
 
-
+  const handleDropdown = (e)=>{
+    const reason = e.target.value;
+   
+    if(reason!==""){
+      const filterd = userData.defaultRecords.find(record =>record.reason === reason );
+     
+      if(filterd){
+       setData({
+         reason: filterd.reason,
+         amount: filterd.amount,
+         type:   filterd.type,
+         person: filterd.person,
+         mobile: filterd.mobile,
+         isDefault:true,
+         isFromIncome:filterd.isFromIncome
+       })
+      }
+    }else{
+      setData({
+        reason: "",
+        amount: 0,
+        type: "cash",
+        person: "",
+        mobile: "",
+      });
+    }
+}
 
 
 
@@ -142,11 +168,14 @@ console.log(data)
             {/* Default Reasons Select */}
             <div className="form-group">
               <label className="form-label">Default Reasons</label>
-              <select className="form-input" value={data.reason} name="reason"onChange={handleInputChange}>
+              <select className="form-input" value={data.reason} name="reason"onChange={handleDropdown}>
                 <option value="">Select a reason</option>
-                <option value="food">Food</option>
-                <option value="travel">Travel</option>
-                <option value="shopping">Shopping</option>
+                {!!userData.defaultRecords && userData.defaultRecords.map((record,index)=>{
+                  if(record.catagory == currentType){
+                    return <option key={index} value={record.reason} >{record.reason}</option>          
+                  }
+                })
+                }
               </select>
             </div>
 
@@ -181,10 +210,10 @@ console.log(data)
               <label className="form-label">Payment Method</label>
               <div className="payment-options">
                 <label>
-                  <input type="radio" name="type" value="cash" onChange={handleInputChange}  defaultChecked={data.type==="cash"} /> Cash
+                  <input type="radio" name="type" value="cash" onChange={handleInputChange} checked={data.type == "cash"}  /> Cash
                 </label>
                 <label>
-                  <input type="radio" name="type" value="gpay" onChange={handleInputChange} defaultChecked={data.type==="gpay"} /> GPay
+                  <input type="radio" name="type" value="gpay" onChange={handleInputChange} checked={data.type == "gpay"} /> GPay
                 </label>
               </div>
               <label className="form-label">Others</label>
@@ -193,12 +222,12 @@ console.log(data)
                 
                 <div className="form-checkbox-group">
                   <div className="form-checkbox">
-                    <input type="checkbox" defaultChecked={data.isDefault} name="isDefault" onClick={handleCheckboxChange} id="make-default" />
+                    <input type="checkbox"  name="isDefault" onClick={handleCheckboxChange} checked={data.isDefault} id="make-default" />
                     <label htmlFor="make-default" className="font">Make it default</label>
                   </div>
                   {currentType === "expense" && <>
                   <div className="form-checkbox">
-                  <input type="checkbox" defaultChecked={data.isFromIncome} name="isFromIncome" onClick={handleCheckboxChange} id="make-default" />
+                  <input type="checkbox"  name="isFromIncome" onClick={handleCheckboxChange} checked={data.isFromIncome} id="make-default" />
                   <label htmlFor="make-default" className="font">Its From Income</label>
                 </div>
                   </>
