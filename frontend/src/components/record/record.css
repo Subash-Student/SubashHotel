@@ -122,3 +122,72 @@
 .expense{
     color: red;
 }
+
+
+.detail-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Three Dots (Only Show When Active) */
+  .three-dots {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  /* Speaker Icon - Parallel to Image & Amount */
+  .speaker-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 125px; /* Adjust as needed */
+    color: #A0A0A0;  /* Light Gray */
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* Modal */
+  .modal {
+    position: absolute;
+    top: 35px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .modal-content button {
+    border: none;
+    background: #f5f5f5;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  
+  .modal-content button:hover {
+    background: #e0e0e0;
+  }
+  
+  /* Moves Amount to Bottom-Right When Active */
+  .detail-item.active .amount {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+  

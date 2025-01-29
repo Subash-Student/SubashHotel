@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import {useNavigate} from "react-router-dom"
+import React, { useContext, useState } from 'react';
 import "./record.css"; 
 import axios from "axios"
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import { StoreContext } from '../../context/context';
 import AddDetails from '../addDetails/AddDetails.jsx';
-
+import { BsThreeDotsVertical, BsFillVolumeUpFill } from "react-icons/bs";
+import PopupModal from '../popuModel/PopupModal.jsx';
 
 
 
@@ -32,9 +32,15 @@ const fetchRecordsData = async (token) => {
 
 const Record = () => {
 
+  const [isImage, setIsImage] = useState(false);
+  const [isAudio, setIsAudio] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [audioUrl, setAudioUrl] = useState('');
+  const [showPopupModal, setShowPopupModal] = useState(false);
   
     const [activeRecord, setActiveRecord] = useState(null);
-    const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(null);
+    
     const { isOpen, token, setRecords,setIsOpen } = useContext(StoreContext);
 
     const { data: records, isLoading, isError, error } = useQuery({
@@ -60,6 +66,25 @@ const Record = () => {
       return <h1>Error: {error.message}</h1>; // Safely display the error message
     }
   
+    const openImageModal = () => {
+      setIsImage(true);
+      setIsAudio(false);
+      setShowPopupModal(true);
+    };
+  
+    const openAudioModal = () => {
+      setIsAudio(true);
+      setIsImage(false);
+      setShowPopupModal(true);
+    };
+  
+    // Close the modal
+    const closeModal = () => {
+      setShowPopupModal(false);
+    };
+
+
+
 
 
     return (
@@ -68,46 +93,101 @@ const Record = () => {
   <hr className="divider" />
 
   <div className="record-list">
-    {records ? 
-      records.map((record, key) => {
-        return (
-          <div className="detail-item" key={key}>
+  {records
+        ?.filter(record => record.createdAt.split("T")[0] !== new Date().toISOString().split("T")[0])
+        .map((record, key) => (
+          <div 
+            className={`detail-item ${activeRecord === key ? "active" : ""}`} 
+            key={key} 
+            onClick={() =>{
+              setActiveRecord(activeRecord === key ? null : key);
+              setImageUrl(record.image);
+              setAudioUrl(record.audio)
+               } }
+          >
+
+            {/* Show Three Dots Only When Active */}
+            {activeRecord === key && (
+              <div className="three-dots" onClick={(e) => { 
+                e.stopPropagation();
+                setShowModal(showModal === key ? null : key);
+              }}>
+                <BsThreeDotsVertical size={18} />
+              </div>
+            )}
+
+            {/* Image */}
             <div className="image-container">
               <img
                 src="https://static.thenounproject.com/png/1123247-200.png"
                 alt="Attachment"
-                onClick={() => setActiveRecord(activeRecord === key ? null : key)}
               />
             </div>
+
             <div className="detail-content">
               <p className="details">{record.reason}</p>
+
               {activeRecord === key && (
                 <div>
-                  {record.person && <><p className="contact">{`${record.person ? record.person :""} | ${record.mobile?record.mobile:""}`}</p> </> }
+                  {record.person && (
+                    <p className="contact">{`${record.person} | ${record.mobile || ""}`}</p>
+                  )}
                   <p className="date-time">
-                    {`Date: ${record.createdAt.split("T")[0]} | ${new Date(record.createdAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true })}`}
+                    {`Date: ${record.createdAt.split("T")[0]} | ${new Date(record.createdAt).toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}`}
                   </p>
                   <div className="file-info">
-                    <img src={record.image} alt="File Attachment" />
-                    <p>document.pdf</p>
+                    <img onClick={openImageModal} src={record.image} alt="File Attachment" />
+                    <p onClick={openImageModal}>Attachments</p>
                   </div>
                 </div>
               )}
             </div>
 
-            <div className={record.catagory === "expense" ? "amount expense" : "amount"}>₹ {record.amount}</div>
+            {/* Speaker Icon - Parallel Between Image & Amount */}
+            {activeRecord === key && (
+              <div className="speaker-icon">
+                <BsFillVolumeUpFill size={16} onClick={openAudioModal} color="#A0A0A0" />
+              </div>
+            )}
+
+            {/* Amount - Moves to Bottom Right when Active */}
+            <div 
+              className={record.catagory === "expense" ? "amount expense" : "amount"} 
+              style={{ position: activeRecord === key ? "absolute" : "static", bottom: activeRecord === key ? "10px" : "auto", right: activeRecord === key ? "10px" : "auto" }}
+            >
+              ₹ {record.amount}
+            </div>
+
+            {/* Modal for Three Dots */}
+            {showModal === key && (
+              <div className="modal">
+                <div className="modal-content">
+                  <button onClick={() => console.log("Edit Record")}>Edit</button>
+                  <button onClick={() => console.log("Delete Record")}>Delete</button>
+                </div>
+              </div>
+            )}
           </div>
-        );
-      })
-    : (
-      <p className="details">No Records!</p>
-    )}
+        ))}
   </div>
 
   <button className="add-button" onClick={() =>setIsOpen(true) }>+</button>
   {isOpen &&
    <AddDetails />
   }
+    {showPopupModal && (
+        <PopupModal
+          isImage={isImage}
+          isAudio={isAudio}
+          imageUrl={imageUrl}
+          audioUrl={audioUrl}
+          closeModal={closeModal}
+        />
+      )}
 </div>
     
     );
