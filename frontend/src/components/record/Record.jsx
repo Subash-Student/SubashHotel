@@ -55,7 +55,10 @@ const Record = () => {
         toast.error(err.message || "An error occurred"); // Show error message
       },
     });
-  
+    
+    if(records){
+      setRecords(records)
+    }
     // Loading state
     if (isLoading) {
       return <h1>Loading...</h1>;
@@ -94,7 +97,7 @@ const Record = () => {
 
   <div className="record-list">
   {records
-        ?.filter(record => record.createdAt.split("T")[0] !== new Date().toISOString().split("T")[0])
+        ?.filter(record => record.createdAt.split("T")[0] === new Date().toISOString().split("T")[0])
         .map((record, key) => (
           <div 
             className={`detail-item ${activeRecord === key ? "active" : ""}`} 

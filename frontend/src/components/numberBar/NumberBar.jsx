@@ -4,22 +4,35 @@ import { StoreContext } from '../../context/context';
 
 const NumberBar = () => {
     const { records } = useContext(StoreContext);
-    console.log(records);
+    
 
     const { income, expense } = useMemo(() => {
         let income = 0;
         let expense = 0;
-
-        !!records?records.forEach((record) => {
-            if (record.catagory === "income") {
-                income += record.amount;
-            } else {
-                expense += record.amount;
-            }
-        }): <></>
-
+    
+        if (records) {
+            records.forEach((record) => {
+                // Check if createdAt exists
+                if (!record.createdAt) return;
+    
+                // Compare the date correctly (without time)
+                if (record.createdAt.split("T")[0] !== new Date().toISOString().split("T")[0]) {
+                    return;
+                }
+                
+                // Check category and accumulate
+                if (record.catagory === "income") {
+                    income += record.amount;
+                } else if (record.catagory === "expense") {
+                    expense += record.amount;
+                }
+            });
+        }
+    
         return { income, expense };
-    }, [records]); // Recalculates only when `records` change.
+    }, [records]);
+    
+    
 
     return (
         <div className="body3">
