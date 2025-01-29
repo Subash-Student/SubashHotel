@@ -1,6 +1,5 @@
 import { useState, createContext } from "react";
-import axios from "axios"
-
+import {  useQueryClient } from "@tanstack/react-query";
 
 
 export const StoreContext = createContext();
@@ -8,10 +7,11 @@ export const StoreContext = createContext();
 const StoreContextProvider = (props) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [userData,setUserData] = useState({});
-    const [currentPage,setCurrentPage] = useState("record");
-const [records,setRecords] = useState([]);
-const [isOpen, setIsOpen] = useState(false);
-
+  const [currentPage,setCurrentPage] = useState("record");
+  const [records,setRecords] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const queryClient = useQueryClient();
     
 
   
@@ -27,7 +27,8 @@ const [isOpen, setIsOpen] = useState(false);
     records,
     setRecords,
     isOpen,
-    setIsOpen
+    setIsOpen,
+    queryClient
   };
 
   return (

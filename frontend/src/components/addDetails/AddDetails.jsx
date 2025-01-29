@@ -8,7 +8,7 @@ import { FaMicrophone, FaTrashAlt } from "react-icons/fa";
 
 
 const AddDetails = () => {
-  const { isOpen,userData, token,setIsOpen } = useContext(StoreContext);
+  const { isOpen,userData, token,setIsOpen ,queryClient} = useContext(StoreContext);
 
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [currentType,setCurrentType] = useState("expense");
@@ -76,7 +76,7 @@ const AddDetails = () => {
     
     formData.append("audio",audioBlob);
     formData.append("image",image);
-
+    formData.append("catagory",currentType);
     try {
       const response = await axios.post("http://localhost:5000/api/add-record-details",formData,{
         headers: {
@@ -97,9 +97,13 @@ const AddDetails = () => {
         });
         setImage(null);
         setAudioBlob(null);
-        setAudioURL("");
-         document.getElementById("image").value = "";
+        setAudioURL(null);
+        const image =  document.getElementById("image");
+        if(image){image.value =""}
+        queryClient.invalidateQueries(["records"]); // Refresh records after deletion
+
       } else {
+       
         toast.error(response.data.message);
       }
 
@@ -171,7 +175,7 @@ const AddDetails = () => {
               <select className="form-input" value={data.reason} name="reason"onChange={handleDropdown}>
                 <option value="">Select a reason</option>
                 {!!userData.defaultRecords && userData.defaultRecords.map((record,index)=>{
-                  if(record.catagory == currentType){
+                  if(record.catagory === currentType){
                     return <option key={index} value={record.reason} >{record.reason}</option>          
                   }
                 })
@@ -210,10 +214,10 @@ const AddDetails = () => {
               <label className="form-label">Payment Method</label>
               <div className="payment-options">
                 <label>
-                  <input type="radio" name="type" value="cash" onChange={handleInputChange} checked={data.type == "cash"}  /> Cash
+                  <input type="radio" name="type" value="cash" onChange={handleInputChange} checked={data.type === "cash"}  /> Cash
                 </label>
                 <label>
-                  <input type="radio" name="type" value="gpay" onChange={handleInputChange} checked={data.type == "gpay"} /> GPay
+                  <input type="radio" name="type" value="gpay" onChange={handleInputChange} checked={data.type === "gpay"} /> GPay
                 </label>
               </div>
               <label className="form-label">Others</label>

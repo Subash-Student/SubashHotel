@@ -2,26 +2,14 @@ import React, { useContext, useState } from 'react';
 import "./record.css"; 
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { StoreContext } from '../../context/context';
 import AddDetails from '../addDetails/AddDetails.jsx';
 import { BsThreeDotsVertical, BsFillVolumeUpFill } from "react-icons/bs";
 import PopupModal from '../popuModel/PopupModal.jsx';
 
-const fetchRecordsData = async (token) => {
-  try {
-    const response = await axios.get("http://localhost:5000/api/get-records", {
-      headers: { token },
-      withCredentials: true,
-    });
-    if (!response.data.success) {
-      throw new Error(response.data.message);
-    }
-    return response.data.records;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || "Failed to fetch records data!");
-  }
-};
+
+
 
 const Record = () => {
   const [activeRecord, setActiveRecord] = useState(null);
@@ -31,8 +19,7 @@ const Record = () => {
   const [mediaUrl, setMediaUrl] = useState('');
   const [showPopupModal, setShowPopupModal] = useState(false);
 
-  const { isOpen, token, setIsOpen } = useContext(StoreContext);
-  const queryClient = useQueryClient();
+  const { isOpen, token, setIsOpen,setRecords ,queryClient} = useContext(StoreContext);
 
   const { data: records = [], isLoading, isError, error } = useQuery({
     queryKey: ["records", token],
@@ -40,6 +27,23 @@ const Record = () => {
     enabled: !!token,
     onError: (err) => toast.error(err.message || "An error occurred"),
   });
+
+  const fetchRecordsData = async (token) => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/get-records", {
+        headers: { token },
+        withCredentials: true,
+      });
+      if (!response.data.success) {
+        throw new Error(response.data.message);
+      }
+      setRecords(response.data.records)
+      return response.data.records;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Failed to fetch records data!");
+    }
+  };
+
 
   const openModal = (type, url) => {
     setIsImage(type === "image");
@@ -49,6 +53,7 @@ const Record = () => {
   };
 
   const handleDelete = async (recordId) => {
+
     try {
       const response = await axios.delete(`http://localhost:5000/api/delete-record/${recordId}`, {
         headers: { token },
@@ -57,6 +62,7 @@ const Record = () => {
       if (response.data.success) {
         toast.success(response.data.message);
         queryClient.invalidateQueries(["records"]); // Refresh records after deletion
+        setRecords(prevRecords => prevRecords.filter(record => record._id !== recordId));
         setShowModal(null);
       } else {
         toast.info(response.data.message);
@@ -75,7 +81,7 @@ const Record = () => {
       <hr className="divider" />
 
       <div className="record-list">
-        {records?.filter(record => record.createdAt.split("T")[0] !== new Date().toISOString().split("T")[0])
+        {records?.filter(record => record.createdAt.split("T")[0] === new Date().toISOString().split("T")[0])
           .map((record, key) => (
             <div 
               className={`detail-item ${activeRecord === key ? "active" : ""}`} 
