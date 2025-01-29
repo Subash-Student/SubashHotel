@@ -97,7 +97,7 @@ const Record = () => {
 
   <div className="record-list">
   {records
-        ?.filter(record => record.createdAt.split("T")[0] === new Date().toISOString().split("T")[0])
+        ?.filter(record => record.createdAt.split("T")[0] !== new Date().toISOString().split("T")[0])
         .map((record, key) => (
           <div 
             className={`detail-item ${activeRecord === key ? "active" : ""}`} 

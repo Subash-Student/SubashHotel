@@ -38,9 +38,10 @@ export const getReocrds = async (req,res)=>{
 
 export const addRecordDetails = async (req, res) => {
   const {
+    recordId,
     reason,
     amount,
-    catagory,  // Fixed typo
+    catagory,
     type,
     isDefault,
     person,
@@ -56,25 +57,58 @@ export const addRecordDetails = async (req, res) => {
   let audioPath = null;
 
   try {
-    // Upload audio if present
-    if (audioFile) {
-      const audioResult = await uploadAudio(audioFile);
-      if (!audioResult?.success) {
-        return res.status(500).json({ error: "Audio upload failed" });
+    // Function to handle the file upload process
+    const handleFileUpload = async (file, uploadFunction, type) => {
+      if (file) {
+        const result = await uploadFunction(file);
+        if (!result?.success) {
+          throw new Error(`${type} upload failed`);
+        }
+        return result.url;
       }
-      audioPath = audioResult.url;
-    }
+      return null;
+    };
+
+    // Upload audio if present
+    audioPath = await handleFileUpload(audioFile, uploadAudio, 'Audio');
 
     // Upload image if present
-    if (imageFile) {
-      const imageResult = await uploadImage(imageFile);
-      if (!imageResult?.success) {
-        return res.status(500).json({ error: "Image upload failed" });
+    imagePath = await handleFileUpload(imageFile, uploadImage, 'Image');
+
+    // If recordId exists, update the record
+    if (recordId) {
+      const record = await recordsModal.findById(recordId);
+      if (!record) {
+        return res.status(404).json({ success: false, message: "Record not found" });
       }
-      imagePath = imageResult.url;
+
+      if(record.image && !imageFile ){
+          imagePath = record.image;
+      }
+      if(record.audio && !audioFile ){
+          audioPath = record.audio;
+      }
+
+      const updatedData = await recordsModal.findByIdAndUpdate(recordId, {
+        reason,
+        amount,
+        catagory,
+        type,
+        person,
+        mobile,
+        isFromIncome,
+        image: imagePath,
+        audio: audioPath,
+      }, { new: true });
+
+      if (updatedData) {
+        return res.json({ success: true, updatedData, message: "Record Updated!" });
+      } else {
+        return res.status(500).json({ success: false, message: "Update failed" });
+      }
     }
 
-    // Create new record
+    // Create new record if recordId is not provided
     const newRecord = new recordsModal({
       user_id,
       reason,
@@ -88,44 +122,35 @@ export const addRecordDetails = async (req, res) => {
       audio: audioPath,
     });
 
-    let isSavedData = await newRecord.save();
+    const savedData = await newRecord.save();
 
+    // If isDefault is true, handle default records
     if (isDefault) {
       const userData = await userModal.findById(user_id);
       if (!userData) {
         return res.status(404).json({ success: false, message: "User not found" });
       }
-      
-      let isSameDefaultRecord;
 
-      if(userData.defaultRecords.length == 0){
-        isSameDefaultRecord = false;
-      }else{
-        isSameDefaultRecord =  userData.defaultRecords.some(record =>
-         record.reason === reason && record.amount === Number(amount)
-     );
+      // Check if the record already exists in the default records
+      const isSameDefaultRecord = userData.defaultRecords.some(record =>
+        record.reason === reason && record.amount === Number(amount)
+      );
 
-      }
-    
-    
-
-    
-    
-       console.log(isSameDefaultRecord)
       if (!isSameDefaultRecord) {
-        userData.defaultRecords.push(isSavedData); // Fixed incorrect push syntax
+        userData.defaultRecords.push(savedData);
         await userData.save();
       }
     }
 
-    if (isSavedData) {
-      return res.json({ success: true, isSavedData, message: "Record Added!" });
+    if (savedData) {
+      return res.json({ success: true, savedData, message: "Record Added!" });
     } else {
       return res.status(500).json({ success: false, message: "Save failed, try later" });
     }
+
   } catch (error) {
     console.error("Error adding record:", error);
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message || "Internal Server Error" });
   }
 };
 
@@ -179,4 +204,25 @@ export const addRecordDetails = async (req, res) => {
   }
   
 
-  
+  export const deleteRecord = async (req, res) => {
+    const { id } = req.params; // Assuming the ID is passed as a URL parameter
+
+    try {
+        const record = await recordsModal.findByIdAndDelete(id);
+
+        // Check if record is found and deleted
+        if (!record) {
+            return res.status(404).json({ success: false, message: "Record not found" });
+        }
+
+        // Successful deletion
+        return res.status(200).json({ success: true, message: "Record deleted successfully" });
+
+    } catch (error) {
+        console.error("Error deleting record:", error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+
+
