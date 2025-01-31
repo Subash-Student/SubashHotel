@@ -1,0 +1,44 @@
+/* body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 20px;
+} */
+
+.chart-container {
+  max-width: 500px;
+  margin: 8px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 7px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 80px;
+  overflow: scroll;
+}
+
+canvas {
+  max-width: 100%;
+  margin-top: 20px;
+}
+
+.legend-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 5px 10px;
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 8px;
+  border-radius: 50%;
+}

@@ -1,0 +1,35 @@
+.timeframe-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f3f4f6; /* Tailwind gray-100 */
+    border-radius: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0.25rem;
+  }
+  
+  .timeframe {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    color: #4b5563; /* Tailwind gray-700 */
+  }
+  
+  .timeframe.active {
+    background-color: white;
+    color: #3b82f6; /* Tailwind blue-500 */
+    border-radius: 9px;
+    font-size: small;
+    height: 40px;
+    padding: 5px;
+  }
+  
+  .ellipsis {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0.5rem;
+    color: #4b5563; /* Tailwind gray-700 */
+  }
+  
