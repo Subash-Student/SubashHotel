@@ -1,12 +1,12 @@
 
 import React from 'react'
-import PieChart from "../pieChart/PieChart"
+import PieChartComponent from "../pieChart/PieChartComponent"
 import LineChart from '../lineChart/LineChart'
 
 const Analysis = () => {
   return (
     <div>
-      <PieChart />
+      <PieChartComponent isMargin={true} />
       <LineChart />
     </div>
   )

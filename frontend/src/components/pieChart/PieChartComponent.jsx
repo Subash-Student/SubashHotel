@@ -68,7 +68,7 @@ const Legend = ({ labels, colors }) => {
   );
 };
 
-const App = () => {
+const PieChartComponent = ({isMargin}) => {
   const expenseData = {
     labels: ['Rent', 'Food', 'Entertainment', 'Travel', 'Savings'],
     datasets: [
@@ -81,7 +81,7 @@ const App = () => {
   };
 
   return (
-    <div className="chart-container">
+    <div className={isMargin?"chart-container":"chart-container-lessMargin" }>
       <TabSelector/>
       <TimeframeSelector/>
       <PieChart data={expenseData} />
@@ -90,4 +90,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default PieChartComponent;
