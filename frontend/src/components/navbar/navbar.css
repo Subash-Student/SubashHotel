@@ -59,7 +59,11 @@
   .user-button:hover {
     background-color: #f0f0f0;
   }
-  
+  .exitIcon{
+    color: white;
+    width: 30px;
+    height: 30px;
+  }
 
   .date-bar {
     margin-top: 15px;

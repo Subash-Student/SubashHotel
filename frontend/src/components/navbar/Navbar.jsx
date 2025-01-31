@@ -1,5 +1,6 @@
 import React from "react";
 import './navbar.css';
+import { IoMdExit } from "react-icons/io";
 
 const Navbar = () => {
   
@@ -17,7 +18,7 @@ const Navbar = () => {
           />
           <span className="app-name">Save My Money</span>
         </div>
-        <button className="user-button">S</button> 
+        <IoMdExit className="exitIcon"/>
       </nav>
 
       
