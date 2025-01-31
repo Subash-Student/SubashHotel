@@ -54,8 +54,10 @@ const LineChart = () => {
 
   return (
     <div className="chart-container2">
+      <div className="pad">
       <TabSelector/>
       <TimeframeSelector/>
+      </div>
       <div className="chart-wrapper">
         <Line data={data} options={options} />
       </div>

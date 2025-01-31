@@ -29,3 +29,28 @@
 .total-section {
   color: #3b82f6; /* Tailwind blue-500 */
 }
+.total-amount-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: #f3f4f6; Light gray background */
+  /* border-radius: 25px; */
+  /* padding: 0.5rem 1rem; */
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1f2937; /* Dark gray text */
+  margin-bottom: 0.75rem;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  width: 90%;
+  text-align: center;
+}
+
+.total-amount-label {
+  margin-right: 0.5rem;
+  color: #6b7280; /* Medium gray */
+}
+
+.total-amount-value {
+  color: #10b981; /* Tailwind green-500 */
+  font-weight: bold;
+}

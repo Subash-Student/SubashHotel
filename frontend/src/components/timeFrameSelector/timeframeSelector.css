@@ -1,35 +1,108 @@
 .timeframe-selector {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f3f4f6; /* Tailwind gray-100 */
-    border-radius: 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 0.25rem;
-  }
-  
-  .timeframe {
-    flex: 1;
-    text-align: center;
-    padding: 0.5rem 1rem;
-    font-weight: bold;
-    color: #4b5563; /* Tailwind gray-700 */
-  }
-  
-  .timeframe.active {
-    background-color: white;
-    color: #3b82f6; /* Tailwind blue-500 */
-    border-radius: 9px;
-    font-size: small;
-    height: 40px;
-    padding: 5px;
-  }
-  
-  .ellipsis {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 0.5rem;
-    color: #4b5563; /* Tailwind gray-700 */
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f4f6;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  position: relative;
+}
+
+.timeframe {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.timeframe.active {
+  background-color: white;
+  color: #3b82f6;
+  border-radius: 9px;
+  font-size: small;
+  height: 40px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ellipsis {
+  margin-left: 5px;
+  color: #4b5563;
+}
+
+/* Modal Styling */
+.modal-overlay3 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal3 {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 90%;
+  max-width: 250px;
+  position: relative;
+}
+
+/* Modal Header */
+.modal-header3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Close Icon */
+.close-icon {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #ef4444;
+  transition: color 0.3s ease;
+}
+
+.close-icon:hover {
+  color: #dc2626;
+}
+
+/* Date Inputs */
+.date-input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Close Button */
+.close-btn3 {
+  background-color: #ef4444;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.close-btn3:hover {
+  background-color: #dc2626;
+}
