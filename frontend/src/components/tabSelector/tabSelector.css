@@ -18,16 +18,33 @@
 }
 
 .income-section {
+ 
+  color: 22c55e;
+}
+.income-section-active {
   background-color: #22c55e; /* Tailwind green-500 */
   color: white;
+  transition: 1s;
+
 }
 
 .expense-section {
   color: #ef4444; /* Tailwind red-500 */
 }
+.expense-section-active {
+  background-color: #ef4444; /* Tailwind green-500 */
+  color: white;
+  transition: 1s;
+
+}
 
 .total-section {
   color: #3b82f6; /* Tailwind blue-500 */
+}
+.total-section-active {
+  background-color: #3b82f6; /* Tailwind green-500 */
+  color: white;
+  transition: 1s;
 }
 .total-amount-container {
   display: flex;
@@ -50,7 +67,12 @@
   color: #6b7280; /* Medium gray */
 }
 
-.total-amount-value {
+.total-amount-value-income {
   color: #10b981; /* Tailwind green-500 */
   font-weight: bold;
 }
+.total-amount-value-expense {
+  color: #ef4444; /* Tailwind green-500 */
+  font-weight: bold;
+}
+
