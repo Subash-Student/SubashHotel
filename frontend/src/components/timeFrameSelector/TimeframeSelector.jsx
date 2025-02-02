@@ -3,7 +3,7 @@ import "./timeframeSelector.css";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay: new Date().toISOString() }, setDate }) => {
+const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay: new Date().toISOString() }, setDate, isLine }) => {
   const [showModal, setShowModal] = useState(false);
   const [activeTimeframe, setActiveTimeframe] = useState("TODAY");
 
@@ -16,28 +16,30 @@ const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay
     setShowModal(!showModal);
   };
 
-  const getStartOfWeek = () => {
+  const getStartOfWeek = (weeksAgo = 0) => {
     const today = new Date();
-    const firstDay = new Date(today.setDate(today.getDate() - today.getDay() + 1)); // Monday
+    const dayOfWeek = today.getDay(); // 0 (Sunday) - 6 (Saturday)
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) - 7 * weeksAgo);
+    monday.setHours(0, 0, 0, 0);
+    return monday.toISOString();
+  };
+
+  const getEndOfWeek = (weeksAgo = 0) => {
+    const sunday = new Date(getStartOfWeek(weeksAgo));
+    sunday.setDate(sunday.getDate() + 6);
+    sunday.setHours(23, 59, 59, 999);
+    return sunday.toISOString();
+  };
+
+  const getStartOfMonth = (monthsAgo = 0) => {
+    const firstDay = new Date(new Date().getFullYear(), new Date().getMonth() - monthsAgo, 1);
     firstDay.setHours(0, 0, 0, 0);
     return firstDay.toISOString();
   };
 
-  const getEndOfWeek = () => {
-    const today = new Date();
-    const lastDay = new Date(today.setDate(today.getDate() - today.getDay() + 7)); // Sunday
-    lastDay.setHours(23, 59, 59, 999);
-    return lastDay.toISOString();
-  };
-
-  const getStartOfMonth = () => {
-    const firstDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-    firstDay.setHours(0, 0, 0, 0);
-    return firstDay.toISOString();
-  };
-
-  const getEndOfMonth = () => {
-    const lastDay = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+  const getEndOfMonth = (monthsAgo = 0) => {
+    const lastDay = new Date(new Date().getFullYear(), new Date().getMonth() - monthsAgo + 1, 0);
     lastDay.setHours(23, 59, 59, 999);
     return lastDay.toISOString();
   };
@@ -51,9 +53,15 @@ const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay
     } else if (timeframe === "WEEK") {
       start = getStartOfWeek();
       end = getEndOfWeek();
+    } else if (timeframe === "LAST_WEEK") {
+      start = getStartOfWeek(1);
+      end = getEndOfWeek(1);
     } else if (timeframe === "MONTH") {
       start = getStartOfMonth();
       end = getEndOfMonth();
+    } else if (timeframe === "LAST_MONTH") {
+      start = getStartOfMonth(1);
+      end = getEndOfMonth(1);
     }
 
     setDate({ startDay: start, endDay: end });
@@ -78,23 +86,31 @@ const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay
   return (
     <div className="timeframe-selector">
       <div
-        className={`timeframe ${activeTimeframe === "TODAY" ? "active" : ""}`}
-        onClick={() => updateTimeframe("TODAY")}
+        className={`timeframe ${activeTimeframe === "TODAY" || activeTimeframe === "WEEK" ? "active" : ""}`}
+        onClick={() => updateTimeframe(isLine ? "WEEK" : "TODAY")}
       >
-        Today
+        {isLine ? "This Week" : "Today"}
       </div>
       <div
-        className={`timeframe ${activeTimeframe === "WEEK" ? "active" : ""}`}
-        onClick={() => updateTimeframe("WEEK")}
+        className={`timeframe ${activeTimeframe === "LAST_WEEK" ? "active" : ""}`}
+        onClick={() => updateTimeframe(isLine ? "LAST_WEEK" : "WEEK")}
       >
-        Week
+        {isLine ? "Last Week" : "Week"}
       </div>
       <div
-        className={`timeframe ${activeTimeframe === "MONTH" ? "active" : ""}`}
-        onClick={() => updateTimeframe("MONTH")}
+        className={`timeframe ${activeTimeframe === "LAST_MONTH" ? "active" : ""}`}
+        onClick={() => updateTimeframe(isLine ? "LAST_MONTH" : "MONTH")}
       >
-        Month
+        {isLine ? "Last Month" : "Month"}
       </div>
+      {isLine && (
+        <div
+          className={`timeframe ${activeTimeframe === "MONTH" ? "active" : ""}`}
+          onClick={() => updateTimeframe("MONTH")}
+        >
+          This Month
+        </div>
+      )}
       <span className="ellipsis" onClick={toggleModal}>
         <BsThreeDotsVertical />
       </span>
