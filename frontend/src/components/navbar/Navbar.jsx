@@ -46,7 +46,7 @@ const Navbar = () => {
             />
           </a>
         </div>
-        <IoMdExit className="exitIcon" />
+        <IoMdExit onClick={()=>localStorage.removeItem("token")} className="exitIcon" />
       </nav>
 
       <div className="date-bar">

@@ -21,7 +21,7 @@
     margin-bottom: 10px;
 }
 .record-list {
-    max-height: 400px; /* Set the desired maximum height for the record list */
+    max-height: 750px; /* Set the desired maximum height for the record list */
     overflow-y: auto;  /* Enables vertical scrolling when content exceeds max-height */
   }
   
