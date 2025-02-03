@@ -2,7 +2,7 @@ import express from "express";
 import connectDB from "./config/db.js";
 import cors from "cors"
 import userModal from "./model/userModel.js";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import userRouter from "./routes/userRoute.js";
 import applicationRoute from "./routes/applicationRoute.js";
 

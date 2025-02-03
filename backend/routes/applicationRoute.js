@@ -1,6 +1,6 @@
 import express from 'express';
 import authMiddleware from '../middleware/auth.js';
-import { addRecordDetails, deleteRecord, getReocrds } from '../middleware/applicationController.js';
+import { addRecordDetails, deleteRecord, getReocrds } from '../controller/applicationController.js';
 import multer from "multer"
 
 

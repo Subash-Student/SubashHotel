@@ -1,6 +1,6 @@
 
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import validator from "validator"
 import CryptoJS from "crypto-js";
 import dotenv from 'dotenv';
