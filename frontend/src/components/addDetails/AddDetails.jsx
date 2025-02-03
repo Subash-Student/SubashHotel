@@ -8,7 +8,7 @@ import { FaMicrophone, FaTrashAlt } from "react-icons/fa";
 
 
 const AddDetails = () => {
-  const { isOpen,userData, token,setIsOpen ,fetchRecords,setIsLoading} = useContext(StoreContext);
+  const { isOpen,userData, token,setIsOpen ,queryClient,fetchRecords,setIsLoading} = useContext(StoreContext);
 
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [currentType,setCurrentType] = useState("expense");
@@ -102,7 +102,8 @@ const AddDetails = () => {
         setAudioURL(null);
         const image =  document.getElementById("image");
         if(image){image.value =""}
-       fetchRecords()
+       fetchRecords();
+       queryClient.invalidateQueries(["userData"]); 
       } else {
        
         toast.error(response.data.message);
@@ -175,12 +176,17 @@ const AddDetails = () => {
               <label className="form-label">தினசரி காரணங்கள்</label>
               <select className="form-input" value={data.reason} name="reason"onChange={handleDropdown}>
                 <option value="">காரணங்கள்</option>
-                {!!userData.defaultRecords && userData.defaultRecords.map((record,index)=>{
-                  if(record.catagory === currentType){
-                    return <option key={index} value={record.reason} >{record.reason}</option>          
-                  }
-                })
-                }
+                {!!userData.defaultRecords && userData.defaultRecords.map((record, index) => {
+  if (record.catagory === currentType) {
+    return (
+      <option key={index} value={record.reason}>
+        {record.reason}
+      </option>
+    );
+  }
+  return null; // Explicitly return null when condition is false
+})}
+
               </select>
             </div>
 
