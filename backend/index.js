@@ -31,7 +31,9 @@ app.use(cors({
 
 app.use("/api",userRouter);
 app.use("/api",applicationRoute)
-
+app.get("/",(req,res)=>{
+    res.send("hello world")
+})
 // CREATE THE SERVER
 
 app.listen(PORT,()=>{
