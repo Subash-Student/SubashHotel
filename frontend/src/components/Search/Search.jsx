@@ -18,7 +18,7 @@ const Search = () => {
     <div className='search'>
       <NumberBar date={searchDate}/>
       <div className="date-container">
-        <label htmlFor="date" className="date-label">Select a Date to View Records</label>
+        <label htmlFor="date" className="date-label">தேதியைத் தேர்ந்தெடுக்கவும்</label>
         <div className="input-wrapper">
           <input
             type="date"
@@ -29,7 +29,7 @@ const Search = () => {
           />
         </div>
       </div>
-      <Record />
+      <Record isAddIcon={false}/>
       <PieChartComponent isDate={false} isMargin={false} />
     </div>
   );

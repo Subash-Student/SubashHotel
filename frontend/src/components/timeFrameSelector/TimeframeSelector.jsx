@@ -3,7 +3,7 @@ import "./timeframeSelector.css";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay: new Date().toISOString() }, setDate, isLine }) => {
+const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay: new Date().toISOString() }, setDate,isSmallFont, isLine }) => {
   const [showModal, setShowModal] = useState(false);
   const [activeTimeframe, setActiveTimeframe] = useState("TODAY");
 
@@ -88,31 +88,32 @@ const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay
   return (
     <div className="timeframe-selector">
       <div
-        className={`timeframe ${activeTimeframe === "TODAY" || activeTimeframe === "WEEK" ? "active" : ""}`}
+        className={` ${isSmallFont?"timeframe-small":"timeframe"} ${activeTimeframe === "TODAY" || activeTimeframe === "WEEK" ? "active" : ""}`}
         onClick={() => updateTimeframe(isLine ? "WEEK" : "TODAY")}
       >
-        {isLine ? "This Week" : "Today"}
+        {isLine ? "இந்த வாரம்" : "இன்று"}
       </div>
       <div
-        className={`timeframe ${activeTimeframe === "LAST_WEEK" ? "active" : ""}`}
+        className={`${isSmallFont?"timeframe-small":"timeframe"} ${activeTimeframe === "LAST_WEEK" ? "active" : ""}`}
         onClick={() => updateTimeframe(isLine ? "LAST_WEEK" : "WEEK")}
       >
-        {isLine ? "Last Week" : "Week"}
+        {isLine ? "கடந்த வாரம்" : "வாரம்"}
       </div>
-      <div
-        className={`timeframe ${activeTimeframe === "LAST_MONTH" ? "active" : ""}`}
-        onClick={() => updateTimeframe(isLine ? "LAST_MONTH" : "MONTH")}
-      >
-        {isLine ? "Last Month" : "Month"}
-      </div>
+      
       {isLine && (
         <div
-          className={`timeframe ${activeTimeframe === "MONTH" ? "active" : ""}`}
+          className={`${isSmallFont?"timeframe-small":"timeframe"} ${activeTimeframe === "MONTH" ? "active" : ""}`}
           onClick={() => updateTimeframe("MONTH")}
         >
-          This Month
+          இந்த மாதம்
         </div>
       )}
+      <div
+        className={`${isSmallFont?"timeframe-small":"timeframe"} ${activeTimeframe === "LAST_MONTH" ? "active" : ""}`}
+        onClick={() => updateTimeframe(isLine ? "LAST_MONTH" : "MONTH")}
+      >
+        {isLine ? "கடந்த மாதம்" : "மாதம்"}
+      </div>
       <span className="ellipsis" onClick={toggleModal}>
         <BsThreeDotsVertical />
       </span>
@@ -121,17 +122,17 @@ const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay
         <div className="modal-overlay3" onClick={toggleModal}>
           <div className="modal3" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header3">
-              <h3>Select Date Range</h3>
+              <h3>தேதி வரம்பு</h3>
               <AiOutlineClose className="close-icon" onClick={toggleModal} />
             </div>
-            <label>Start Date</label>
+            <label>தொடக்க நாள்</label>
             <input
               type="date"
               className="date-input"
               value={tempDate.startDay}
               onChange={(e) => handleDateChange(e, "startDay")}
             />
-            <label>End Date</label>
+            <label>இறுதி நாள்</label>
             <input
               type="date"
               className="date-input"
@@ -139,7 +140,7 @@ const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay
               onChange={(e) => handleDateChange(e, "endDay")}
             />
             <button className="save-btn3" onClick={saveDateRange}>
-              Save
+            சமர்ப்பிக்கவும்
             </button>
           </div>
         </div>

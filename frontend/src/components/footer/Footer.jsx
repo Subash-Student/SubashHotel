@@ -16,7 +16,7 @@ const Footer = () => {
                     className="footer-icon"
                     
                 />
-                <p className="footer-text">Record</p>
+                <p className="footer-text">பதிவுகள்</p>
             </div>
             <div className="footer-item"  onClick={()=>{setCurrentPage("analysis")}}>
                 <img
@@ -25,7 +25,7 @@ const Footer = () => {
                     className="footer-icon"
                    
                 />
-                <p className="footer-text">Analysis</p>
+                <p className="footer-text">வரைபடம்</p>
             </div>
             <div className="footer-item" onClick={()=>{setCurrentPage("search")}}>
                 <img
@@ -34,7 +34,7 @@ const Footer = () => {
                     className="footer-icon"
                     
                 />
-                <p className="footer-text">Search</p>
+                <p className="footer-text">தேடல்</p>
             </div>
         </div>
     );

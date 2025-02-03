@@ -78,7 +78,7 @@ const Home = () => {
       ) : (
         <>
           <NumberBar searchDate={null} />
-          <Record searchDate={null}/>
+          <Record  isAddIcon = {true}/>
         </>
       )}
     

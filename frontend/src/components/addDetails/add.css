@@ -104,7 +104,7 @@
 
 .form-checkbox-group {
   display: flex;
-  gap: 50px;
+  /* gap: 50px; */
 }
 .image-container {
   flex-shrink: 0;

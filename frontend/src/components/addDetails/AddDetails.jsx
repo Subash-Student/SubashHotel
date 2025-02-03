@@ -160,8 +160,8 @@ const AddDetails = () => {
         <div className="popup-content">
           {/* Navbar */}
           <div className="popup-navbar">
-            <button className={`popup-nav-button ${currentType === "income" ? "income":""}`} onClick={()=>setCurrentType("income")}>Income</button>
-            <button className={`popup-nav-button ${currentType === "expense" ? "expense":""}`} onClick={()=>setCurrentType("expense")}>Expense</button>
+            <button className={`popup-nav-button ${currentType === "income" ? "income":""}`} onClick={()=>setCurrentType("income")}>வரவு</button>
+            <button className={`popup-nav-button ${currentType === "expense" ? "expense":""}`} onClick={()=>setCurrentType("expense")}>செலவு</button>
             <button onClick={()=>setIsOpen(false)} className="popup-close-button">
               X
             </button>
@@ -171,9 +171,9 @@ const AddDetails = () => {
           <div className="popup-body">
             {/* Default Reasons Select */}
             <div className="form-group">
-              <label className="form-label">Default Reasons</label>
+              <label className="form-label">தினசரி காரணங்கள்</label>
               <select className="form-input" value={data.reason} name="reason"onChange={handleDropdown}>
-                <option value="">Select a reason</option>
+                <option value="">காரணங்கள்</option>
                 {!!userData.defaultRecords && userData.defaultRecords.map((record,index)=>{
                   if(record.catagory === currentType){
                     return <option key={index} value={record.reason} >{record.reason}</option>          
@@ -185,7 +185,7 @@ const AddDetails = () => {
 
             {/* Custom Reason Input */}
             <div className="form-group">
-              <label className="form-label">Reason</label>
+              <label className="form-label">காரணம்</label>
               <input
               value={data.reason}
                 type="text"
@@ -198,7 +198,7 @@ const AddDetails = () => {
 
             {/* Amount Input */}
             <div className="form-group">
-              <label className="form-label">Amount</label>
+              <label className="form-label">தொகை</label>
               <input
               value={data.amount}
                 type="number"
@@ -211,28 +211,28 @@ const AddDetails = () => {
 
             {/* Payment Options and Checkboxes */}
             <div className="form-group">
-              <label className="form-label">Payment Method</label>
+              <label className="form-label">பணம் செலுத்தும் முறை</label>
               <div className="payment-options">
                 <label>
-                  <input type="radio" name="type" value="cash" onChange={handleInputChange} checked={data.type === "cash"}  /> Cash
+                  <input type="radio" name="type" value="cash" onChange={handleInputChange} checked={data.type === "cash"}  /> பணம்
                 </label>
                 <label>
-                  <input type="radio" name="type" value="gpay" onChange={handleInputChange} checked={data.type === "gpay"} /> GPay
+                  <input type="radio" name="type" value="gpay" onChange={handleInputChange} checked={data.type === "gpay"} /> வங்கி கணக்கு
                 </label>
               </div>
-              <label className="form-label">Others</label>
+              <label className="form-label">மற்றவை</label>
              
               <div className="action-row">
                 
                 <div className="form-checkbox-group">
                   <div className="form-checkbox">
                     <input type="checkbox"  name="isDefault" onClick={handleCheckboxChange} checked={data.isDefault} id="make-default" />
-                    <label htmlFor="make-default" className="font">Make it default</label>
+                    <label htmlFor="make-default" className="font">தினசரி காரணமா?</label>
                   </div>
                   {currentType === "expense" && <>
                   <div className="form-checkbox">
                   <input type="checkbox"  name="isFromIncome" onClick={handleCheckboxChange} checked={data.isFromIncome} id="make-default" />
-                  <label htmlFor="make-default" className="font">Its From Income</label>
+                  <label htmlFor="make-default" className="font">இது வருமானத்திலிருந்து?</label>
                 </div>
                   </>
                   }
@@ -247,14 +247,14 @@ const AddDetails = () => {
               
               />
             <button onClick={handleToggleDetails} className="more-details">
-                  More details
+            மேலும் 
                 </button>
             </div>
             {/* Additional Details */}
             {showMoreDetails && (
               <div className="more-details-content">
                 <div className="form-group">
-                  <label className="form-label">Person Name</label>
+                  <label className="form-label">நபர் பெயர்</label>
                   <input
                     type="text"
                     placeholder="Enter name"
@@ -264,7 +264,7 @@ const AddDetails = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Mobile Number</label>
+                  <label className="form-label">மொபைல் எண்</label>
                   <input
                     type="tel"
                     placeholder="Enter mobile"
@@ -274,13 +274,13 @@ const AddDetails = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Upload Image</label>
+                  <label className="form-label">படத்தை பதிவேற்றவும்</label>
                   <input type="file" id="image" onChange={handleFileChange} className="form-input" />
                 </div>
 
 
                 <div className="form-group">
-      <label className="form-label">Voice Record</label>
+      <label className="form-label">குரல் பதிவு</label>
 
       <div className="recording-controls">
         {status !== "recording" &&
@@ -290,7 +290,7 @@ const AddDetails = () => {
           disabled={status === "recording"}
         >
           <FaMicrophone className="mic-icon" />
-          {status === "recording" ? "Recording..." : "Click to Record"}
+          {status === "recording" ? "பதிவு செய்கிறது......" : "பதிவு செய்"}
         </button>)
         }
 
@@ -298,7 +298,7 @@ const AddDetails = () => {
           <button className="record-button recording" onClick={stopRecording}>
           <FaMicrophone className="mic-icon" />
 
-            Stop
+          நிறுத்து
           </button>
         )}
       </div>
@@ -321,7 +321,7 @@ const AddDetails = () => {
 
           {/* Footer */}
           <div className="popup-footer">
-            <button className="submit-button" onClick={onSubmit}>Submit</button>
+            <button className="submit-button" onClick={onSubmit}>சமர்ப்பிக்கவும்</button>
           </div>
         </div>
       </div>

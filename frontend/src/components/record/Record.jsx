@@ -7,7 +7,7 @@ import AddDetails from '../addDetails/AddDetails.jsx';
 import { BsThreeDotsVertical, BsFillVolumeUpFill } from "react-icons/bs";
 import PopupModal from '../popuModel/PopupModal.jsx';
 
-const Record = () => {
+const Record = ({isAddIcon}) => {
   const [activeRecord, setActiveRecord] = useState(null);
   const [showModal, setShowModal] = useState(null);
   const [isImage, setIsImage] = useState(false);
@@ -56,7 +56,7 @@ const Record = () => {
 
   return (
     <div id="body">
-      <div className="header3">Records</div>
+      <div className="header3">பதிவுகள்</div>
       <hr className="divider" />
 
       <div className="record-list">
@@ -87,20 +87,21 @@ const Record = () => {
                     {record.person && (
                       <p className="contact">{`${record.person} | ${record.mobile || ""}`}</p>
                     )}
-                    <p className="date-time">{`Date: ${record.createdAt.split("T")[0]} | ${new Date(record.createdAt).toLocaleTimeString()}`}</p>
+                    <p className="date-time">{`தேதி: ${record.createdAt.split("T")[0]} | ${new Date(record.createdAt).toLocaleTimeString()}`}</p>
                     <div className="file-info">
                       {record.image && <img onClick={() => openModal("image", record.image)} src={record.image} alt="File" />}
-                      <p onClick={() => openModal("image", record.image)}>Attachments</p>
+                      {record.image || record.audio ? <p onClick={() => openModal("image", record.image)}>Attachments</p>:"" }
+                      
                     </div>
+                    {record.audio &&
+                    <div className="speaker-icon">
+                    <BsFillVolumeUpFill size={16} onClick={() => openModal("audio", record.audio)} color="#A0A0A0" />
+                  </div>}
                   </div>
                 )}
               </div>
 
-              {activeRecord === key && (
-                <div className="speaker-icon">
-                  <BsFillVolumeUpFill size={16} onClick={() => openModal("audio", record.audio)} color="#A0A0A0" />
-                </div>
-              )}
+              
 
               <div className={record.catagory === "expense" ? "amount expense" : "amount"}>
                 ₹ {record.amount}
@@ -116,8 +117,8 @@ const Record = () => {
             </div>
           ))}
       </div>
-
-      <button className="add-button" onClick={() => setIsOpen(true)}>+</button>
+     {isAddIcon && <button className="add-button" onClick={() => setIsOpen(true)}>+</button>}
+      
       {isOpen && <AddDetails />}
 
       {showPopupModal && (

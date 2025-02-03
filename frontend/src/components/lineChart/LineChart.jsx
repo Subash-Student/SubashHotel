@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2"; // Import Bar instead of Line
 import { StoreContext } from "../../context/context";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import TimeframeSelector from "../timeFrameSelector/TimeframeSelector";
 import TabSelector from "../tabSelector/TabSelector";
 import {
@@ -17,6 +18,7 @@ import "./lineChart.css";
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const LineChart = ({isDate}) => {
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -35,8 +37,17 @@ const LineChart = ({isDate}) => {
         mode: "index",
         intersect: false,
       },
+      datalabels: {
+        color: "white",  // Change text color to white
+        font: {
+          weight: 'bold', // Optional: make the text bold
+        },
+        align: 'center', // Align the labels to the center of the bar
+        anchor: 'center', // Place the label at the center of the bar
+      },
     },
   };
+  
 
   
 
@@ -95,7 +106,7 @@ const LineChart = ({isDate}) => {
     // console.log("Date Difference (in days): ", diffDays);
   
     if (diffDays === 7) {
-      labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      labels = ["தி", "செ", "பு", "வி", "வெ", "ச", "ஞா"];
       tempIncomeData = new Array(7).fill(0);
       tempExpenseData = new Array(7).fill(0);
   
@@ -110,7 +121,7 @@ const LineChart = ({isDate}) => {
       });
   
     } else if (diffDays >= 28 && diffDays <= 31) {
-      labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+      labels = ["வாரம் 1", "வாரம் 2", "வாரம் 3", "வாரம் 4"];
       tempIncomeData = [0, 0, 0, 0];
       tempExpenseData = [0, 0, 0, 0];
   
@@ -141,40 +152,39 @@ const LineChart = ({isDate}) => {
       });
     }
   
-    // Set the data for the chart
     const datasets = [];
-    if (currentType === "income") {
-      datasets.push({
-        label: "Income",
-        data: tempIncomeData,
-        backgroundColor: "#22c55e",
-      });
-      total = tempIncomeData.reduce((acc, value) => acc + value, 0);
-    } else if (currentType === "expense") {
-      datasets.push({
-        label: "Expense",
-        data: tempExpenseData,
-        backgroundColor: "#ef4444",
-      });
-      total = tempExpenseData.reduce((acc, value) => acc + value, 0);
-    } else if (currentType === "total") {
-      const totalData = tempIncomeData.map((income, index) => income - tempExpenseData[index]);
-      total = totalData.reduce((acc, value) => acc + value, 0); // Corrected total calculation
-      if(total > 0){
-        datasets.push({
-          label: "Total",
-          data: totalData,
-          backgroundColor: "#22c55e",
-        });
-      }else{
-        datasets.push({
-          label: "Total",
-          data: totalData,
-          backgroundColor: "#ef4444",
-        });
-      }
-    }
-  
+if (currentType === "income") {
+  datasets.push({
+    label: "வரவு",
+    data: tempIncomeData,
+    backgroundColor: "#22c55e",
+  });
+  total = tempIncomeData.reduce((acc, value) => acc + value, 0);
+} else if (currentType === "expense") {
+  datasets.push({
+    label: "சிலவு",
+    data: tempExpenseData,
+    backgroundColor: "#ef4444",
+  });
+  total = tempExpenseData.reduce((acc, value) => acc + value, 0);
+} else if (currentType === "total") {
+  const totalData = tempIncomeData.map((income, index) => income - tempExpenseData[index]);
+  total = totalData.reduce((acc, value) => acc + value, 0); // Corrected total calculation
+  if(total > 0){
+    datasets.push({
+      label: "வரவு",
+      data: totalData,
+      backgroundColor: "#22c55e",
+    });
+  } else {
+    datasets.push({
+      label: "சிலவு",
+      data: totalData,
+      backgroundColor: "#ef4444",
+    });
+  }
+}
+
     setData({
       labels,
       datasets,
@@ -193,7 +203,7 @@ const LineChart = ({isDate}) => {
     <div className="chart-container2">
       <div className="pad">
         <TabSelector currentType={currentType} handleCurrentType={handleCurrentType} totalAmount={totalAmount} />
-        {isDate &&  <TimeframeSelector date={date} setDate={setDate} isLine={true} />}
+        {isDate &&  <TimeframeSelector date={date} isSmallFont={true} setDate={setDate} isLine={true} />}
       </div>
       <div className="chart-wrapper">
         <Bar data={data} options={options} /> {/* Use Bar instead of Line */}

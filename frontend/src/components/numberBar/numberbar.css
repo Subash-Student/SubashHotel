@@ -60,5 +60,6 @@
     .bar-section {
         padding: 10px 0;
         flex: 1;
+        margin-top: 5px;
     }
 }

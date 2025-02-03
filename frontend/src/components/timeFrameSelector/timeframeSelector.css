@@ -17,6 +17,15 @@
   color: #4b5563;
   cursor: pointer;
 }
+.timeframe-small {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  color: #4b5563;
+  cursor: pointer;
+  font-size: 11px;
+}
 
 .timeframe.active {
   background-color: white;

@@ -52,9 +52,9 @@ const LogIn = () => {
         <div className="login-container">
             <div className="header1">
                 
-                <img src="https://www.thegreatapps.com/application/upload/Apps/2017/03/expense-manager-22.png" alt="Save My Money Logo" className="logo1" />
+                <img src="chef-logo2.png" alt="Save My Money Logo" className="logo1" />
                 
-                <h1 className="app-name1">Save My Money</h1>
+                <a href="https://fontmeme.com/tamil/"><img className='app-img2' src="https://fontmeme.com/permalink/250203/0d83dd16f58de88dabc23564dd57d416.png" alt="tamil" border="0"/></a>
             </div>
 
            
@@ -86,7 +86,7 @@ const LogIn = () => {
                 
                 <button type="submit">Login</button>
                 
-                <p>New ? <span onClick={()=>navigate("/register")}>Register</span></p>
+                {/* <p>New ? <span onClick={()=>navigate("/register")}>Register</span></p> */}
                
             </form>
         </div>
