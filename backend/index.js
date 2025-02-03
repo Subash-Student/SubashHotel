@@ -20,7 +20,7 @@ connectDB()
 
 app.use(express.json())
 app.use(cors({
-    origin: "https://subash-hotel.vercel.app", // React app origin
+    origin: "/", // React app origin
     credentials: true,
   }));
 
