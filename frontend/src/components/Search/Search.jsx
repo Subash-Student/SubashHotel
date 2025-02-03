@@ -30,7 +30,7 @@ const Search = () => {
         </div>
       </div>
       <Record isAddIcon={false}/>
-      <PieChartComponent isDate={false} isMargin={false} />
+      <PieChartComponent isDate={false} searchDate={searchDate} isMargin={false} />
     </div>
   );
 };

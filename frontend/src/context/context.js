@@ -12,15 +12,17 @@ const StoreContextProvider = (props) => {
   const [records,setRecords] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [searchDate, setSearchDate] = useState(new Date().toISOString().split("T")[0]);
-  
+  const [isLoading,setIsLoading] = useState(false);
   const queryClient = useQueryClient();
     
   const fetchRecords = async () => {
     try {
+      setIsLoading(true)
       const response = await axios.get("http://localhost:5000/api/get-records", {
         headers: { token },
         withCredentials: true,
       });
+      setIsLoading(false)
       if (!response.data.success) {
         throw new Error(response.data.message);
       }
@@ -46,7 +48,9 @@ const StoreContextProvider = (props) => {
     queryClient,
     searchDate,
     setSearchDate,
-    fetchRecords
+    fetchRecords,
+    isLoading,
+    setIsLoading
   };
 
   return (

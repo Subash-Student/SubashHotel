@@ -36,7 +36,7 @@ const fetchUserData = async ({ queryKey }) => {
 };
 
 const Home = () => {
-  const { token,isOpen, setUserData, currentPage } = useContext(StoreContext);
+  const { token,isOpen, setUserData, currentPage,setIsLoading} = useContext(StoreContext);
 
   // Use `useQuery` with object-based arguments (React Query v5 format)
   const { data: userData, isLoading, isError, error } = useQuery({
@@ -44,6 +44,7 @@ const Home = () => {
     queryFn: fetchUserData, // Query function
     enabled: !!token, // Only run the query if token exists
     onSuccess: (data) => {
+      setIsLoading(false)
       setUserData(data)
        // Update user data in context
       toast.success("User Data Fetched Successfully!");
@@ -58,12 +59,12 @@ const Home = () => {
   },[userData])
   // Loading state
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    setIsLoading(true)
   }
 
   // Error state
   if (isError) {
-    return <h1>Error: {error}</h1>;
+    setIsLoading(true)
   }
 
   

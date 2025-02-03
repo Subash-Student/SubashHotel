@@ -8,7 +8,7 @@ import { FaMicrophone, FaTrashAlt } from "react-icons/fa";
 
 
 const AddDetails = () => {
-  const { isOpen,userData, token,setIsOpen ,queryClient} = useContext(StoreContext);
+  const { isOpen,userData, token,setIsOpen ,queryClient,setIsLoading} = useContext(StoreContext);
 
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [currentType,setCurrentType] = useState("expense");
@@ -78,12 +78,14 @@ const AddDetails = () => {
     formData.append("image",image);
     formData.append("catagory",currentType);
     try {
+      setIsLoading(true)
       const response = await axios.post("http://localhost:5000/api/add-record-details",formData,{
         headers: {
           token: token,
         },
         withCredentials: true,
       });
+      setIsLoading(false)
       if (response.data.success) {
         toast.success(response.data.message);
         setData({

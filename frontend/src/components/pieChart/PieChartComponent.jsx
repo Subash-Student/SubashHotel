@@ -62,7 +62,7 @@ const Legend = ({ labels, colors }) => (
   </div>
 );
 
-const PieChartComponent = ({ isMargin ,isDate }) => {
+const PieChartComponent = ({ isMargin ,isDate ,searchDate}) => {
   const { records, queryClient } = useContext(StoreContext);
   const [totalAmount, setTotalAmount] = useState(0);
   const [expenseData, setExpenseData] = useState({ labels: [], datasets: [] });
@@ -72,6 +72,15 @@ const PieChartComponent = ({ isMargin ,isDate }) => {
     endDay: new Date().toISOString(),
   });
 
+  useEffect(() => {
+    setDate({
+      startDay: `${searchDate}T`,
+      endDay: `${searchDate}T`,
+    });
+  }, [searchDate]);
+
+console.log(searchDate)
+console.log(date)
   useEffect(() => {
     queryClient.invalidateQueries(['records']);
     if (!records || !records.length) return;
@@ -92,7 +101,7 @@ const PieChartComponent = ({ isMargin ,isDate }) => {
         catagory === 'income' ? (income += amount) : (expense += amount);
       });
       total = income - expense;
-      labels = ['Income', 'Expense'];
+      labels = ['வரவு', 'செலவு'];
       data = [income, expense];
       backgroundColor = ['#22c55e', '#ef4444'];
     } else {
@@ -130,7 +139,7 @@ const PieChartComponent = ({ isMargin ,isDate }) => {
           <Legend labels={expenseData.labels} colors={expenseData.datasets[0]?.backgroundColor || []} />
         </>
       ) : (
-        <p>No Data Available</p>
+        <img src="no-data-img.png" className='no-data-img' alt="" />
       )}
     </div>
   );

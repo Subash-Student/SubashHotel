@@ -53,3 +53,7 @@ canvas {
   margin-right: 8px;
   border-radius: 50%;
 }
+.no-data-img{
+  width: 60%;
+  margin-left: 60px;
+}

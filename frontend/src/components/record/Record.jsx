@@ -15,7 +15,7 @@ const Record = ({isAddIcon}) => {
   const [mediaUrl, setMediaUrl] = useState('');
   const [showPopupModal, setShowPopupModal] = useState(false);
 
-  const { isOpen, token, searchDate, setIsOpen, setRecords,fetchRecords, queryClient,records } = useContext(StoreContext);
+  const { isOpen, token, searchDate, setIsOpen, setRecords,fetchRecords, queryClient,records,setIsLoading } = useContext(StoreContext);
   // const [records, setRecordsData] = useState([]);
 
   useEffect(() => {
@@ -30,10 +30,12 @@ const Record = ({isAddIcon}) => {
   // Handle delete record
   const handleDelete = async (recordId) => {
     try {
+      setIsLoading(true)
       const response = await axios.delete(`http://localhost:5000/api/delete-record/${recordId}`, {
         headers: { token },
         withCredentials: true,
       });
+      setIsLoading(false)
       if (response.data.success) {
         toast.success(response.data.message);
         setRecords((prevRecords) => prevRecords.filter(record => record._id !== recordId));
