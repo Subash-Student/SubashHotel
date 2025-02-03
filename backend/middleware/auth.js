@@ -3,6 +3,7 @@ import CryptoJS from "crypto-js";
 import dotenv from "dotenv";
 dotenv.config();
 
+
 // Middleware to check for authorized user
 const authMiddleware = async (req, res, next) => {
     const { token } = req.headers;
