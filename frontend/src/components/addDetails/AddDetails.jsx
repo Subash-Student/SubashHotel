@@ -8,7 +8,7 @@ import { FaMicrophone, FaTrashAlt } from "react-icons/fa";
 
 
 const AddDetails = () => {
-  const { isOpen,userData, token,setIsOpen ,queryClient,setIsLoading} = useContext(StoreContext);
+  const { isOpen,userData, token,setIsOpen ,fetchRecords,setIsLoading} = useContext(StoreContext);
 
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [currentType,setCurrentType] = useState("expense");
