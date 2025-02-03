@@ -4,7 +4,7 @@ import { IoMdExit } from "react-icons/io";
 import { StoreContext } from "../../context/context";
 
 const Navbar = () => {
-  const { searchDate, currentPage } = useContext(StoreContext);
+  const { searchDate, setToken,currentPage } = useContext(StoreContext);
 
   const today = new Date();
   const options = { year: 'numeric', day: 'numeric' };
@@ -26,7 +26,10 @@ const Navbar = () => {
     const tamilMonthForSearchDate = tamilMonths[parseInt(month) - 1];  // Convert month from numeric to Tamil
     return `${parseInt(day)} ${tamilMonthForSearchDate} ${year}`;  // Remove leading 0 from day
   };
-
+const logOut = ()=>{
+  localStorage.removeItem("token");
+  setToken(null)
+}
   return (
     <div className="nav">
       <nav className="navbar">
@@ -46,7 +49,7 @@ const Navbar = () => {
             />
           </a>
         </div>
-        <IoMdExit onClick={()=>localStorage.removeItem("token")} className="exitIcon" />
+        <IoMdExit onClick={logOut} className="exitIcon" />
       </nav>
 
       <div className="date-bar">
