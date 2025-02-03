@@ -18,7 +18,7 @@ const StoreContextProvider = (props) => {
   const fetchRecords = async () => {
     try {
       setIsLoading(true)
-      const response = await axios.get("subash-hotel-backend.vercel.app/api/get-records", {
+      const response = await axios.get("https://subash-hotel-backend.vercel.app/api/get-records", {
         headers: { token },
         withCredentials: true,
       });

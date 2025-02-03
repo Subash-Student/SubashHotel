@@ -26,7 +26,7 @@ const LogIn = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("subash-hotel-backend.vercel.app/api/login",formData);
+            const response = await axios.post("https://subash-hotel-backend.vercel.app/api/login",formData);
             if(response.data.success){
                 localStorage.setItem("token",response.data.token)
                 toast.success(response.data.message);
