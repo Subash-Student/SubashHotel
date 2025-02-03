@@ -79,7 +79,7 @@ const AddDetails = () => {
     formData.append("catagory",currentType);
     try {
       setIsLoading(true)
-      const response = await axios.post("http://localhost:5000/api/add-record-details",formData,{
+      const response = await axios.post("subash-hotel-backend.vercel.app/api/add-record-details",formData,{
         headers: {
           token: token,
         },

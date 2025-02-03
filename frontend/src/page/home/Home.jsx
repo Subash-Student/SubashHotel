@@ -18,7 +18,7 @@ axios.defaults.withCredentials = true;
 const fetchUserData = async ({ queryKey }) => {
   const token = queryKey[1]; // Extract token from queryKey
   try {
-    const response = await axios.get("http://localhost:5000/api/user", {
+    const response = await axios.get("subash-hotel-backend.vercel.app/api/user", {
       headers: {
         token: token,
       },

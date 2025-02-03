@@ -31,7 +31,7 @@ const Record = ({isAddIcon}) => {
   const handleDelete = async (recordId) => {
     try {
       setIsLoading(true)
-      const response = await axios.delete(`http://localhost:5000/api/delete-record/${recordId}`, {
+      const response = await axios.delete(`subash-hotel-backend.vercel.app/api/delete-record/${recordId}`, {
         headers: { token },
         withCredentials: true,
       });
