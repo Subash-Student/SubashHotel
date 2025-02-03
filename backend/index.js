@@ -19,11 +19,21 @@ connectDB()
 // MIDDLEWARE
 
 app.use(express.json())
-app.use(cors({
-    origin: "https://subash-hotel.vercel.app", // React app origin
-    credentials: true,
-  }));
 
+const allowedOrigins = ["http://localhost:3000", "https://subash-hotel.vercel.app"];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow credentials (cookies, authentication headers)
+  })
+);
 
 
 

@@ -102,8 +102,7 @@ const AddDetails = () => {
         setAudioURL(null);
         const image =  document.getElementById("image");
         if(image){image.value =""}
-        queryClient.invalidateQueries(["records"]); // Refresh records after deletion
-
+       fetchRecords()
       } else {
        
         toast.error(response.data.message);

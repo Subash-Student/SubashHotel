@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -53,7 +53,11 @@ const Home = () => {
       toast.error(err); // Show error message
     },
   });
-
+useEffect(()=>{
+  if(userData){
+    setUserData(userData)
+  }
+},[userData])
   // Loading state
   if (isLoading) {
     setIsLoading(true);
