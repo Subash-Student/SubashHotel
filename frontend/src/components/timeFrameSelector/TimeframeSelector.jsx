@@ -16,6 +16,7 @@ const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay
     setShowModal(!showModal);
   };
 
+  // ✅ Function to get Monday of the current or past week
   const getStartOfWeek = (weeksAgo = 0) => {
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0 (Sunday) - 6 (Saturday)
@@ -25,9 +26,10 @@ const TimeframeSelector = ({ date = { startDay: new Date().toISOString(), endDay
     return monday.toISOString();
   };
 
+  // ✅ Function to get Sunday of the current or past week
   const getEndOfWeek = (weeksAgo = 0) => {
     const sunday = new Date(getStartOfWeek(weeksAgo));
-    sunday.setDate(sunday.getDate() + 6);
+    sunday.setDate(sunday.getDate() + 6); // Move to Sunday of the same week
     sunday.setHours(23, 59, 59, 999);
     return sunday.toISOString();
   };

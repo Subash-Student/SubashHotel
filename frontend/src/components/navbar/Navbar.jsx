@@ -1,9 +1,15 @@
 import React from "react";
+import { useContext } from "react";
 import './navbar.css';
 import { IoMdExit } from "react-icons/io";
+import { StoreContext } from "../../context/context";
 
 const Navbar = () => {
   
+  const { searchDate, currentPage } = useContext(StoreContext);
+
+
+
   const today = new Date();
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   const formattedDate = today.toLocaleDateString('en-US', options);
@@ -23,7 +29,7 @@ const Navbar = () => {
 
       
       <div className="date-bar">
-        <span>{formattedDate}</span>
+        <span>{currentPage === "search" ?searchDate :formattedDate}</span>
       </div>
     </div>
   );

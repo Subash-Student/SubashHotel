@@ -6,8 +6,8 @@ import "./analysis.css"
 const Analysis = () => {
   return (
     <div className='scroll'>
-      <PieChartComponent isMargin={true} />
-      <LineChart />
+      <PieChartComponent isDate={true} isMargin={true} />
+      <LineChart isDate={true} />
     </div>
   )
 }

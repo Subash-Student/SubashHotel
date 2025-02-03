@@ -16,7 +16,7 @@ import "./lineChart.css";
 // Register required components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const LineChart = () => {
+const LineChart = ({isDate}) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -38,77 +38,95 @@ const LineChart = () => {
     },
   };
 
+  
+
+
   const { records, queryClient } = useContext(StoreContext);
   const [totalAmount, setTotalAmount] = useState(0);
   const [data, setData] = useState({ labels: [], datasets: [] });
   const [currentType, setCurrentType] = useState("expense");
-  const [date, setDate] = useState({
-    startDay: new Date().toISOString(),
-    endDay: new Date().toISOString(),
-  });
-
+  const getDefaultWeekRange = () => {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // Get current day index (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+  
+    // Find this week's Monday
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - ((dayOfWeek + 6) % 7)); // Move to this week's Monday
+    startOfWeek.setHours(0, 0, 0, 0); // Reset time to start of the day
+  
+    // Find this week's Sunday
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // Move to this week's Sunday
+    endOfWeek.setHours(23, 59, 59, 999); // Set time to end of the day
+  
+    return {
+      startDay: startOfWeek.toISOString(),
+      endDay: endOfWeek.toISOString(),
+    };
+  };
+  
+  const [date, setDate] = useState(getDefaultWeekRange());
+  
+  
+  
   useEffect(() => {
     queryClient.invalidateQueries(["records"]);
-
+  
     if (!records || records.length === 0) return;
-
+  
     let labels = [];
-    let tempIncomeData = new Array(7).fill(0); // Ensure array length matches 7 days
-    let tempExpenseData = new Array(7).fill(0);
+    let tempIncomeData = [];
+    let tempExpenseData = [];
     let total = 0;
-
-    // Filter records by the selected date range
+  
     const filteredRecords = records.filter((record) => {
       const recordDate = new Date(record.createdAt).toISOString().split("T")[0];
       return recordDate >= date.startDay.split("T")[0] && recordDate <= date.endDay.split("T")[0];
     });
-
+  
     const startDate = new Date(date.startDay);
     const endDate = new Date(date.endDay);
     const diffTime = endDate - startDate;
     const diffDays = Math.round(diffTime / (1000 * 3600 * 24));
-
-    console.log("Filtered Records: ", filteredRecords);
-    console.log("Start Date: ", startDate);
-    console.log("End Date: ", endDate);
-    console.log("Date Difference (in days): ", diffDays);
-
-    // Check if the difference is exactly 7 days (for a week view)
+  
+    // console.log("Filtered Records: ", filteredRecords);
+    // console.log("Start Date: ", startDate);
+    // console.log("End Date: ", endDate);
+    // console.log("Date Difference (in days): ", diffDays);
+  
     if (diffDays === 7) {
-      labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      tempIncomeData = new Array(7).fill(0);
+      tempExpenseData = new Array(7).fill(0);
+  
       filteredRecords.forEach((record) => {
         const recordDate = new Date(record.createdAt);
-        const dayIndex = (recordDate.getDay() + 6) % 7// Get the day index (0-6)
+        const dayIndex = (recordDate.getDay() + 6) % 7;
         if (record.catagory === "income") {
           tempIncomeData[dayIndex] += record.amount;
         } else {
           tempExpenseData[dayIndex] += record.amount;
         }
       });
+  
     } else if (diffDays >= 28 && diffDays <= 31) {
       labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
-      // Monthly data logic
-      const monthlyIncomeData = [0, 0, 0, 0];
-      const monthlyExpenseData = [0, 0, 0, 0];
-
+      tempIncomeData = [0, 0, 0, 0];
+      tempExpenseData = [0, 0, 0, 0];
+  
       filteredRecords.forEach((record) => {
         const recordDate = new Date(record.createdAt);
-        const weekIndex = Math.floor(recordDate.getDate() / 7); // Calculate which week of the month the date belongs to
+        const weekIndex = Math.min(3, Math.floor(recordDate.getDate() / 7));
         if (record.catagory === "income") {
-          monthlyIncomeData[weekIndex] += record.amount;
+          tempIncomeData[weekIndex] += record.amount;
         } else {
-          monthlyExpenseData[weekIndex] += record.amount;
+          tempExpenseData[weekIndex] += record.amount;
         }
       });
-
-      console.log("Monthly Income Data: ", monthlyIncomeData);
-      console.log("Monthly Expense Data: ", monthlyExpenseData);
-
-      tempIncomeData = monthlyIncomeData;
-      tempExpenseData = monthlyExpenseData;
+  
     } else {
       const uniqueDates = [...new Set(filteredRecords.map((record) => record.createdAt.split("T")[0]))];
-      labels = uniqueDates.sort((a, b) => new Date(a) - new Date(b)); // Sort dates in ascending order
+      labels = uniqueDates.sort((a, b) => new Date(a) - new Date(b));
       tempIncomeData = new Array(labels.length).fill(0);
       tempExpenseData = new Array(labels.length).fill(0);
   
@@ -122,40 +140,50 @@ const LineChart = () => {
         }
       });
     }
-
-    // Set the data for the chart based on currentType
+  
+    // Set the data for the chart
     const datasets = [];
     if (currentType === "income") {
       datasets.push({
         label: "Income",
         data: tempIncomeData,
-        backgroundColor: "#22c55e", // Green color for income
+        backgroundColor: "#22c55e",
       });
+      total = tempIncomeData.reduce((acc, value) => acc + value, 0);
     } else if (currentType === "expense") {
       datasets.push({
         label: "Expense",
         data: tempExpenseData,
-        backgroundColor: "#ef4444", // Red color for expense
+        backgroundColor: "#ef4444",
       });
+      total = tempExpenseData.reduce((acc, value) => acc + value, 0);
     } else if (currentType === "total") {
       const totalData = tempIncomeData.map((income, index) => income - tempExpenseData[index]);
-      datasets.push({
-        label: "Total",
-        data: totalData,
-        backgroundColor: "#3b82f6", // Blue color for total
-      });
+      total = totalData.reduce((acc, value) => acc + value, 0); // Corrected total calculation
+      if(total > 0){
+        datasets.push({
+          label: "Total",
+          data: totalData,
+          backgroundColor: "#22c55e",
+        });
+      }else{
+        datasets.push({
+          label: "Total",
+          data: totalData,
+          backgroundColor: "#ef4444",
+        });
+      }
     }
-
+  
     setData({
       labels,
       datasets,
     });
-
-    // Calculate total amount for display
-    total = tempIncomeData.reduce((acc, value) => acc + value, 0) - tempExpenseData.reduce((acc, value) => acc + value, 0);
+  
     setTotalAmount(total);
-
+  
   }, [date, currentType, records, queryClient]);
+  
 
   const handleCurrentType = (type) => {
     setCurrentType(type);
@@ -165,7 +193,7 @@ const LineChart = () => {
     <div className="chart-container2">
       <div className="pad">
         <TabSelector currentType={currentType} handleCurrentType={handleCurrentType} totalAmount={totalAmount} />
-        <TimeframeSelector date={date} setDate={setDate} isLine={true} />
+        {isDate &&  <TimeframeSelector date={date} setDate={setDate} isLine={true} />}
       </div>
       <div className="chart-wrapper">
         <Bar data={data} options={options} /> {/* Use Bar instead of Line */}

@@ -2,9 +2,8 @@ import React, { useContext, useMemo } from 'react';
 import './numberbar.css'; 
 import { StoreContext } from '../../context/context';
 
-const NumberBar = () => {
+const NumberBar = ({date}) => {
     const { records } = useContext(StoreContext);
-    
 
     const { income, expense } = useMemo(() => {
         let income = 0;
@@ -16,7 +15,7 @@ const NumberBar = () => {
                 if (!record.createdAt) return;
     
                 // Compare the date correctly (without time)
-                if (record.createdAt.split("T")[0] !== new Date().toISOString().split("T")[0]) {
+                if (record.createdAt.split("T")[0] !== (date ? date : new Date().toISOString().split("T")[0])) {
                     return;
                 }
                 

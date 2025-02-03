@@ -62,7 +62,7 @@ const Legend = ({ labels, colors }) => (
   </div>
 );
 
-const PieChartComponent = ({ isMargin }) => {
+const PieChartComponent = ({ isMargin ,isDate }) => {
   const { records, queryClient } = useContext(StoreContext);
   const [totalAmount, setTotalAmount] = useState(0);
   const [expenseData, setExpenseData] = useState({ labels: [], datasets: [] });
@@ -75,17 +75,17 @@ const PieChartComponent = ({ isMargin }) => {
   useEffect(() => {
     queryClient.invalidateQueries(['records']);
     if (!records || !records.length) return;
-
+  
     let labels = [], data = [], backgroundColor = [];
     let total = 0;
-
+  
     const filteredRecords = records.filter(
       ({ createdAt, catagory }) =>
         createdAt.split('T')[0] >= date.startDay.split('T')[0] &&
         createdAt.split('T')[0] <= date.endDay.split('T')[0] &&
         (currentType === 'total' || catagory === currentType)
     );
-
+  
     if (currentType === 'total') {
       let income = 0, expense = 0;
       filteredRecords.forEach(({ catagory, amount }) => {
@@ -97,23 +97,33 @@ const PieChartComponent = ({ isMargin }) => {
       backgroundColor = ['#22c55e', '#ef4444'];
     } else {
       total = filteredRecords.reduce((sum, { amount }) => sum + amount, 0);
-      labels = filteredRecords.map(({ reason }) => reason);
-      data = filteredRecords.map(({ amount }) => amount);
+      
+      // Aggregate amounts for the same reason
+      const reasonMap = new Map();
+      filteredRecords.forEach(({ reason, amount }) => {
+        reasonMap.set(reason, (reasonMap.get(reason) || 0) + amount);
+      });
+  
+      labels = [...reasonMap.keys()];
+      data = [...reasonMap.values()];
       backgroundColor = [
         '#3357FF', '#FF33A1', '#A133FF', '#33FFF5', '#F5FF33', '#FF8C33',
         '#8C33FF', '#33FF8C', '#FF3333', '#33FF33', '#3333FF', '#FFB533',
         '#B533FF', '#33FFB5', '#FF3357', '#5733FF', '#33A1FF', '#A1FF33',
-      ];
+      ].slice(0, labels.length); // Adjust colors dynamically
+  
     }
-
+  
     setTotalAmount(total);
     setExpenseData({ labels, datasets: [{ data, backgroundColor, hoverOffset: 10 }] });
   }, [date, currentType, records, queryClient]);
+  
 
   return (
     <div className={isMargin ? 'chart-container' : 'chart-container-lessMargin'}>
       <TabSelector currentType={currentType} handleCurrentType={setCurrentType} totalAmount={totalAmount} />
-      <TimeframeSelector date={date} setDate={setDate} isLine={false} />
+      {isDate &&  <TimeframeSelector date={date} setDate={setDate} isLine={false} />}
+     
       {expenseData.labels.length ? (
         <>
           <PieChart data={expenseData} />

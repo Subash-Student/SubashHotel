@@ -166,7 +166,7 @@ const Form = ({ isIncome }) => {
   
   useEffect(()=>{
     fetchRecords();
-  },[]);
+  },[data]);
 
   const handleDropdown = (e)=>{
       const reason = e.target.value;

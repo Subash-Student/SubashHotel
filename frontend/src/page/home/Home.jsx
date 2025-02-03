@@ -66,17 +66,19 @@ const Home = () => {
     return <h1>Error: {error}</h1>;
   }
 
+  
+
   return (
     <div className="home">
-      <Navbar />
+      <Navbar/>
       {currentPage === "analysis" ? (
         <Analysis />
       ) : currentPage === "search" ? (
         <Search />
       ) : (
         <>
-          <NumberBar />
-          <Record />
+          <NumberBar searchDate={null} />
+          <Record searchDate={null}/>
         </>
       )}
     

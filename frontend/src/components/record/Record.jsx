@@ -1,15 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import "./record.css"; 
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useQuery } from "@tanstack/react-query";
 import { StoreContext } from '../../context/context';
 import AddDetails from '../addDetails/AddDetails.jsx';
 import { BsThreeDotsVertical, BsFillVolumeUpFill } from "react-icons/bs";
 import PopupModal from '../popuModel/PopupModal.jsx';
-
-
-
 
 const Record = () => {
   const [activeRecord, setActiveRecord] = useState(null);
@@ -19,41 +15,20 @@ const Record = () => {
   const [mediaUrl, setMediaUrl] = useState('');
   const [showPopupModal, setShowPopupModal] = useState(false);
 
-  const { isOpen, token, setIsOpen,setRecords ,queryClient} = useContext(StoreContext);
+  const { isOpen, token, searchDate, setIsOpen, setRecords,fetchRecords, queryClient,records } = useContext(StoreContext);
+  // const [records, setRecordsData] = useState([]);
 
-  const { data: records = [], isLoading, isError, error } = useQuery({
-    queryKey: ["records", token],
-    queryFn: () => fetchRecordsData(token),
-    enabled: !!token,
-    onError: (err) => toast.error(err.message || "An error occurred"),
-  });
-
-  const fetchRecordsData = async (token) => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/get-records", {
-        headers: { token },
-        withCredentials: true,
-      });
-      if (!response.data.success) {
-        throw new Error(response.data.message);
-      }
-      setRecords(response.data.records)
-      return response.data.records;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Failed to fetch records data!");
+  useEffect(() => {
+    if (token && searchDate) {
+      // Fetch data only if token and date are available
+      fetchRecords();
     }
-  };
+  }, [token, searchDate]); // Trigger when token or date changes
 
+  
 
-  const openModal = (type, url) => {
-    setIsImage(type === "image");
-    setIsAudio(type === "audio");
-    setMediaUrl(url);
-    setShowPopupModal(true);
-  };
-
+  // Handle delete record
   const handleDelete = async (recordId) => {
-
     try {
       const response = await axios.delete(`http://localhost:5000/api/delete-record/${recordId}`, {
         headers: { token },
@@ -61,8 +36,7 @@ const Record = () => {
       });
       if (response.data.success) {
         toast.success(response.data.message);
-        queryClient.invalidateQueries(["records"]); // Refresh records after deletion
-        setRecords(prevRecords => prevRecords.filter(record => record._id !== recordId));
+        setRecords((prevRecords) => prevRecords.filter(record => record._id !== recordId));
         setShowModal(null);
       } else {
         toast.info(response.data.message);
@@ -72,8 +46,13 @@ const Record = () => {
     }
   };
 
-  if (isLoading) return <h1>Loading...</h1>;
-  if (isError) return <h1>Error: {error.message}</h1>;
+  // Open modal for image/audio
+  const openModal = (type, url) => {
+    setIsImage(type === "image");
+    setIsAudio(type === "audio");
+    setMediaUrl(url);
+    setShowPopupModal(true);
+  };
 
   return (
     <div id="body">
@@ -81,7 +60,7 @@ const Record = () => {
       <hr className="divider" />
 
       <div className="record-list">
-        {records?.filter(record => record.createdAt.split("T")[0] !== new Date().toISOString().split("T")[0])
+        {records?.filter(record => record.createdAt.split("T")[0] === searchDate)
           .map((record, key) => (
             <div 
               className={`detail-item ${activeRecord === key ? "active" : ""}`} 
