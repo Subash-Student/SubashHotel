@@ -1,8 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import "./home.css";
+import {CirclesWithBar} from "react-loader-spinner"
 import { StoreContext } from "../../context/context";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
@@ -10,7 +11,6 @@ import NumberBar from "../../components/numberBar/NumberBar";
 import Record from "../../components/record/Record";
 import Analysis from "../../components/analysis/Analysis";
 import Search from "../../components/Search/Search";
-import AddDetails from "../../components/addDetails/AddDetails";
 
 axios.defaults.withCredentials = true;
 
@@ -36,7 +36,7 @@ const fetchUserData = async ({ queryKey }) => {
 };
 
 const Home = () => {
-  const { token,isOpen, setUserData, currentPage,setIsLoading} = useContext(StoreContext);
+  const { token, setUserData, currentPage, setIsLoading } = useContext(StoreContext);
 
   // Use `useQuery` with object-based arguments (React Query v5 format)
   const { data: userData, isLoading, isError, error } = useQuery({
@@ -44,45 +44,58 @@ const Home = () => {
     queryFn: fetchUserData, // Query function
     enabled: !!token, // Only run the query if token exists
     onSuccess: (data) => {
-      setIsLoading(false)
-      setUserData(data)
-       // Update user data in context
+      setIsLoading(false);
+      setUserData(data); // Update user data in context
       toast.success("User Data Fetched Successfully!");
     },
     onError: (err) => {
+      setIsLoading(false);
       toast.error(err); // Show error message
     },
   });
-  useEffect(()=>{
-    if(userData){setUserData(userData)}
 
-  },[userData])
   // Loading state
   if (isLoading) {
-    setIsLoading(true)
+    setIsLoading(true);
+    return null; // Optionally, you can return a loading spinner here
   }
 
   // Error state
   if (isError) {
-    setIsLoading(true)
+    return <div>Error: {error.message}</div>;
   }
-
-  
 
   return (
     <div className="home">
-      <Navbar/>
-      {currentPage === "analysis" ? (
+      <Navbar />
+      {isLoading ?
+      <div className="spinner">
+      <CirclesWithBar
+          height="100"
+          width="100"
+          color="#4fa94d"
+          outerCircleColor="#4fa94d"
+          innerCircleColor="#4fa94d"
+          barColor="#4fa94d"
+          ariaLabel="circles-with-bar-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true} />
+
+      </div>
+    :<>
+        {currentPage === "analysis" ? (
         <Analysis />
       ) : currentPage === "search" ? (
         <Search />
       ) : (
         <>
           <NumberBar searchDate={null} />
-          <Record  isAddIcon = {true}/>
+          <Record isAddIcon={true} />
         </>
       )}
-    
+    </>}
+      
       <Footer />
     </div>
   );

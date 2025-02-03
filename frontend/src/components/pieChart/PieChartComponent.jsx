@@ -79,8 +79,7 @@ const PieChartComponent = ({ isMargin ,isDate ,searchDate}) => {
     });
   }, [searchDate]);
 
-console.log(searchDate)
-console.log(date)
+
   useEffect(() => {
     queryClient.invalidateQueries(['records']);
     if (!records || !records.length) return;

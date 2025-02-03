@@ -14,7 +14,7 @@ const StoreContextProvider = (props) => {
   const [searchDate, setSearchDate] = useState(new Date().toISOString().split("T")[0]);
   const [isLoading,setIsLoading] = useState(false);
   const queryClient = useQueryClient();
-    
+   console.log(isLoading) 
   const fetchRecords = async () => {
     try {
       setIsLoading(true)
