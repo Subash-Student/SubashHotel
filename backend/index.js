@@ -20,7 +20,7 @@ connectDB()
 
 app.use(express.json())
 app.use(cors({
-    origin: "/", // React app origin
+    origin: "*", // React app origin
     credentials: true,
   }));
 
