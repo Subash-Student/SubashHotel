@@ -15,7 +15,7 @@ const AddDetails = () => {
   const [image,setImage] = useState(null);
   const [data,setData] = useState({
     reason:"",
-    amount:"",
+    amount:0,
     type:"Cash",
     person:"",
     mobile:"",
@@ -94,7 +94,7 @@ const AddDetails = () => {
           type: "cash",
           person: "",
           mobile: "",
-          isDefault:false,
+          isDefault:true,
           isFromIncome:false
         });
         setImage(null);
@@ -205,16 +205,19 @@ const AddDetails = () => {
 
             {/* Amount Input */}
             <div className="form-group">
-              <label className="form-label">தொகை</label>
-              <input
-              value={data.amount}
-                type="number"
-                placeholder="Enter amount"
-                className="form-input"
-                name="amount"
-                onChange={handleInputChange}
-              />
-            </div>
+  <label className="form-label">தொகை</label>
+  <input
+    value={data.amount}
+    type="number"
+    inputMode="numeric"
+    pattern="[0-9]*"
+    placeholder="Enter amount"
+    className="form-input"
+    name="amount"
+    onChange={handleInputChange}
+  />
+</div>
+
 
             {/* Payment Options and Checkboxes */}
             <div className="form-group">
