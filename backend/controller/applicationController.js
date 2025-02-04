@@ -125,22 +125,31 @@ export const addRecordDetails = async (req, res) => {
     const savedData = await newRecord.save();
 
     // If isDefault is true, handle default records
-    if (isDefault) {
-      const userData = await userModal.findById(user_id);
-      if (!userData) {
-        return res.status(404).json({ success: false, message: "User not found" });
-      }
-
-      // Check if the record already exists in the default records
-      const isSameDefaultRecord = userData.defaultRecords.some(record =>
-        record.reason === reason && record.amount === Number(amount)
-      );
-
-      if (!isSameDefaultRecord) {
-        userData.defaultRecords.push(savedData);
-        await userData.save();
-      }
+  if (isDefault) {
+    const userData = await userModal.findById(user_id);
+    if (!userData) {
+      return res.status(404).json({ success: false, message: "User not found" });
     }
+
+    // Find index of record with the same reason
+    const existingRecordIndex = userData.defaultRecords.findIndex(
+      (record) => record.reason === reason
+    );
+
+    if (existingRecordIndex === -1) {
+      // If no existing record, add new record
+      userData.defaultRecords.push(savedData);
+    } else {
+      // If record exists, update the amount
+      userData.defaultRecords[existingRecordIndex].amount = amount;
+
+      // Mark the field as modified (important for MongoDB to detect changes)
+      userData.markModified(`defaultRecords.${existingRecordIndex}`);
+    }
+
+    await userData.save();
+  }
+
 
     if (savedData) {
       return res.json({ success: true, savedData, message: "Record Added!" });
