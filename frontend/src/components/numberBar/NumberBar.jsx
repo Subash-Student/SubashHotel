@@ -24,6 +24,7 @@ const NumberBar = ({date}) => {
                     income += record.amount;
                 } else if (record.catagory === "expense") {
                     expense += record.amount;
+                    if(record.isFromIncome){income+=record.amount}
                 }
             });
         }

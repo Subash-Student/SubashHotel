@@ -94,7 +94,7 @@ const AddDetails = () => {
           type: "cash",
           person: "",
           mobile: "",
-          isDefault:true,
+          isDefault:false,
           isFromIncome:false
         });
         setImage(null);

@@ -116,6 +116,9 @@ const LineChart = ({isDate}) => {
         if (record.catagory === "income") {
           tempIncomeData[dayIndex] += record.amount;
         } else {
+          if(record.isFromIncome){
+            tempIncomeData[dayIndex] += record.amount;
+            }
           tempExpenseData[dayIndex] += record.amount;
         }
       });
@@ -131,6 +134,9 @@ const LineChart = ({isDate}) => {
         if (record.catagory === "income") {
           tempIncomeData[weekIndex] += record.amount;
         } else {
+          if(record.isFromIncome){
+            tempIncomeData[weekIndex] += record.amount;
+            }
           tempExpenseData[weekIndex] += record.amount;
         }
       });
@@ -147,44 +153,68 @@ const LineChart = ({isDate}) => {
         if (record.catagory === "income") {
           tempIncomeData[index] += record.amount;
         } else {
+          if(record.isFromIncome){
+          tempIncomeData[index] += record.amount;
+          }
           tempExpenseData[index] += record.amount;
         }
       });
     }
   
     const datasets = [];
-if (currentType === "income") {
-  datasets.push({
-    label: "வரவு",
-    data: tempIncomeData,
-    backgroundColor: "#22c55e",
-  });
-  total = tempIncomeData.reduce((acc, value) => acc + value, 0);
-} else if (currentType === "expense") {
-  datasets.push({
-    label: "சிலவு",
-    data: tempExpenseData,
-    backgroundColor: "#ef4444",
-  });
-  total = tempExpenseData.reduce((acc, value) => acc + value, 0);
-} else if (currentType === "total") {
-  const totalData = tempIncomeData.map((income, index) => income - tempExpenseData[index]);
-  total = totalData.reduce((acc, value) => acc + value, 0); // Corrected total calculation
-  if(total > 0){
-    datasets.push({
-      label: "வரவு",
-      data: totalData,
-      backgroundColor: "#22c55e",
-    });
-  } else {
-    datasets.push({
-      label: "சிலவு",
-      data: totalData,
-      backgroundColor: "#ef4444",
-    });
-  }
-}
-
+    
+    if (currentType === "income") {
+      total = records.reduce((sum, record) => {
+        if (record.catagory === "income") {
+          return sum + (record.amount || 0);
+        } else if (record.catagory === "expense" && record.isFromIncome) {
+          return sum + (record.amount || 0);
+        }
+        return sum;
+      }, 0);
+    
+      datasets.push({
+        label: "வரவு",
+        data: tempIncomeData,
+        backgroundColor: "#22c55e",
+      });
+    
+    } else if (currentType === "expense") {
+      total = tempExpenseData.reduce((acc, value) => acc + (value || 0), 0);
+    
+      datasets.push({
+        label: "சிலவு",
+        data: tempExpenseData,
+        backgroundColor: "#ef4444",
+      });
+    
+    } else if (currentType === "total") {
+      const totalData = tempIncomeData.map((income, index) => 
+        (income || 0) - (tempExpenseData[index] || 0)
+      );
+    
+      // total = totalData.reduce((acc, value) => acc + value, 0);
+    
+      let incomeTotal = records.reduce((sum, record) => {
+        if (record.catagory === "income") {
+          return sum + (record.amount || 0);
+        } else if (record.catagory === "expense" && record.isFromIncome) {
+          return sum + (record.amount || 0);
+        }
+        return sum;
+      }, 0);
+  
+      let expenseTotal = tempExpenseData.reduce((acc, value) => acc + (value || 0), 0);
+   
+      total = incomeTotal-expenseTotal;
+ 
+      datasets.push({
+        label: total > 0 ? "வரவு" : "சிலவு",
+        data: totalData,
+        backgroundColor: total > 0 ? "#22c55e" : "#ef4444",
+      });
+    }
+    
     setData({
       labels,
       datasets,

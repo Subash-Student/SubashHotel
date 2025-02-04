@@ -96,15 +96,32 @@ const PieChartComponent = ({ isMargin ,isDate ,searchDate}) => {
   
     if (currentType === 'total') {
       let income = 0, expense = 0;
-      filteredRecords.forEach(({ catagory, amount }) => {
-        catagory === 'income' ? (income += amount) : (expense += amount);
+      filteredRecords.forEach(({ catagory, amount,isFromIncome }) => {
+        if (catagory === "income") {
+          income += amount;
+      } else if (catagory === "expense") {
+          expense += amount;
+          if(isFromIncome){income+=amount}
+      }
       });
       total = income - expense;
       labels = ['வரவு', 'செலவு'];
       data = [income, expense];
       backgroundColor = ['#22c55e', '#ef4444'];
     } else {
-      total = filteredRecords.reduce((sum, { amount }) => sum + amount, 0);
+
+      if (currentType === "income") {
+        total = records.reduce((sum, record) => {
+          if (record.catagory === "income") {
+            return sum + (record.amount || 0);
+          } else if (record.catagory === "expense" && record.isFromIncome) {
+            return sum + (record.amount || 0);
+          }
+          return sum;
+        }, 0);
+      } else {
+        total = filteredRecords.reduce((sum, { amount }) => sum + (amount || 0), 0);
+      }
       
       // Aggregate amounts for the same reason
       const reasonMap = new Map();

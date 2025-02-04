@@ -56,6 +56,12 @@ const Record = ({isAddIcon}) => {
     setShowPopupModal(true);
   };
 
+  const handleModel = (key)=>{
+    setActiveRecord(activeRecord === key ? null : key);
+    setShowModal(null);
+  }
+
+
   return (
     <div id="body">
       <div className="header3">பதிவுகள்</div>
@@ -74,7 +80,7 @@ const Record = ({isAddIcon}) => {
               <div 
                 className={`detail-item ${activeRecord === key ? "active" : ""}`} 
                 key={key} 
-                onClick={() => setActiveRecord(activeRecord === key ? null : key)}
+                onClick={() => handleModel(key)}
               >
                 {activeRecord === key && (
                   <div className="three-dots" onClick={(e) => { 
@@ -116,7 +122,7 @@ const Record = ({isAddIcon}) => {
                 {showModal === key && (
                   <div className="modal">
                     <div className="modal-content">
-                      <button onClick={() => handleDelete(record._id)}>Delete</button>
+                      <button onClick={() => handleDelete(record._id)}>நீக்கு</button>
                     </div>
                   </div>
                 )}
